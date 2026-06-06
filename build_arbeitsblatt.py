@@ -1,0 +1,328 @@
+"""
+Generiert das Arbeitsblatt zur TikTok-AGB-Praesentation.
+Zwei Versionen: Schueler-AB (leer) und Lehrer-Loesungsblatt.
+"""
+from docx import Document
+from docx.shared import Pt, Cm, RGBColor
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.oxml.ns import qn
+from docx.oxml import OxmlElement
+
+
+# Farben (fuer Papier lesbar abgedunkelt)
+TT_CYAN = RGBColor(0x0C, 0x8C, 0x88)   # Teal statt grellem Cyan
+TT_RED = RGBColor(0xE1, 0x1D, 0x48)    # TikTok-Rot
+TT_PURPLE = RGBColor(0x7C, 0x3A, 0xED)
+TT_GOLD = RGBColor(0xB8, 0x86, 0x0B)
+DARK = RGBColor(0x1a, 0x1a, 0x1a)
+GREY = RGBColor(0x66, 0x66, 0x66)
+GREEN = RGBColor(0x16, 0x80, 0x3C)
+
+
+def set_margins(doc, top=1.5, bottom=1.5, left=1.8, right=1.8):
+    for section in doc.sections:
+        section.top_margin = Cm(top)
+        section.bottom_margin = Cm(bottom)
+        section.left_margin = Cm(left)
+        section.right_margin = Cm(right)
+
+
+def add_para(doc, text, size=11, bold=False, italic=False, color=DARK, space_after=6, space_before=0):
+    p = doc.add_paragraph()
+    p.paragraph_format.space_after = Pt(space_after)
+    p.paragraph_format.space_before = Pt(space_before)
+    run = p.add_run(text)
+    run.font.size = Pt(size)
+    run.font.bold = bold
+    run.font.italic = italic
+    run.font.color.rgb = color
+    run.font.name = "Calibri"
+    return p
+
+
+def add_lines(doc, count=2):
+    """Schreiblinien hinzufuegen - leere Zeilen mit hellem Unterstrich."""
+    for _ in range(count):
+        p = doc.add_paragraph()
+        p.paragraph_format.space_after = Pt(0)
+        p.paragraph_format.space_before = Pt(0)
+        run = p.add_run("_" * 90)
+        run.font.size = Pt(11)
+        run.font.color.rgb = RGBColor(0xCC, 0xCC, 0xCC)
+
+
+def shade_cell(cell, hex_color):
+    tcPr = cell._tc.get_or_add_tcPr()
+    shd = OxmlElement('w:shd')
+    shd.set(qn('w:val'), 'clear')
+    shd.set(qn('w:color'), 'auto')
+    shd.set(qn('w:fill'), hex_color)
+    tcPr.append(shd)
+
+
+def add_kopfzeile(doc, titel, untertitel):
+    """Logo-freie Kopfzeile mit Titel + Name/Klasse/Datum-Zeilen."""
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    p.paragraph_format.space_after = Pt(2)
+    r = p.add_run(titel)
+    r.font.size = Pt(20)
+    r.font.bold = True
+    r.font.color.rgb = DARK
+    r.font.name = "Calibri"
+
+    p2 = doc.add_paragraph()
+    p2.paragraph_format.space_after = Pt(14)
+    r2 = p2.add_run(untertitel)
+    r2.font.size = Pt(11)
+    r2.font.italic = True
+    r2.font.color.rgb = GREY
+
+    t = doc.add_table(rows=1, cols=3)
+    t.autofit = False
+    widths = [Cm(7), Cm(4), Cm(5)]
+    for i, w in enumerate(widths):
+        t.columns[i].width = w
+    cells = t.rows[0].cells
+    for i, label in enumerate(["Name: _____________________________",
+                                "Klasse: __________",
+                                "Datum: ___________"]):
+        cells[i].width = widths[i]
+        para = cells[i].paragraphs[0]
+        run = para.add_run(label)
+        run.font.size = Pt(10)
+        run.font.color.rgb = GREY
+    doc.add_paragraph().paragraph_format.space_after = Pt(8)
+
+
+def aufgabe_header(doc, nr, titel, color=DARK):
+    p = doc.add_paragraph()
+    p.paragraph_format.space_before = Pt(14)
+    p.paragraph_format.space_after = Pt(4)
+    r1 = p.add_run(f"Aufgabe {nr}  -  ")
+    r1.font.size = Pt(12)
+    r1.font.bold = True
+    r1.font.color.rgb = color
+    r1.font.name = "Calibri"
+    r2 = p.add_run(titel)
+    r2.font.size = Pt(12)
+    r2.font.bold = True
+    r2.font.color.rgb = DARK
+    r2.font.name = "Calibri"
+
+
+def baue_arbeitsblatt(loesungen=False):
+    doc = Document()
+    set_margins(doc)
+
+    style = doc.styles['Normal']
+    style.font.name = "Calibri"
+    style.font.size = Pt(11)
+
+    if loesungen:
+        add_kopfzeile(doc,
+            "Loesungsblatt: Was du wirklich zustimmst (TikTok)",
+            "TikTok-AGB - Lehrer-Version mit Erwartungshorizont")
+    else:
+        add_kopfzeile(doc,
+            "Was du wirklich zustimmst - TikTok",
+            "TikTok-AGB - Begleitheft zur Praesentation")
+
+    # ──────────────────────────────────────────────────────────
+    # AUFGABE 1 - Schaetzen vor der Praesentation
+    # ──────────────────────────────────────────────────────────
+    aufgabe_header(doc, 1, "Schaetzen - bevor die Praesentation startet", color=TT_CYAN)
+    add_para(doc, "Wie schaetzt du es ein? Kreuze an oder schreibe deine Vermutung. Wir loesen es danach gemeinsam auf.",
+             italic=True, color=GREY, space_after=10)
+
+    items = [
+        ("Ab welchem Alter darfst du laut TikTok-AGB live streamen und Geschenke (Geld) bekommen?",
+         "[ ] ab 13   [ ] ab 16   [ ] ab 18   [ ] egal",
+         "Ab 18 (TikTok LIVE). Zur Nutzung allgemein ab 13, Direktnachrichten ab 16."),
+        ("Wenn dir ein Fan bei LIVE ein Geschenk schickt - wie viel vom Wert bekommst du als Creator?",
+         "[ ] fast alles   [ ] etwa die Haelfte   [ ] nur ein Viertel",
+         "Etwa die Haelfte - TikTok behaelt rund 50 %."),
+        ("Was sammelt TikTok automatisch ueber dich? (Mehrfachnennung moeglich)",
+         "[ ] Standort   [ ] Tipprhythmus   [ ] In-App-Browsing   [ ] nichts ohne Erlaubnis",
+         "Standort, Tipprhythmus und In-App-Browsing - alles automatisch."),
+        ("Wie hoch war 2025 die EU-Strafe gegen TikTok (Daten nach China)?",
+         "[ ] 5 Mio. EUR   [ ] 53 Mio. EUR   [ ] 530 Mio. EUR   [ ] 5 Mrd. EUR",
+         "530 Mio. EUR - verhaengt von der irischen Datenschutzbehoerde am 2. Mai 2025."),
+        ("Verdient TikTok an deinen Videos Geld, ohne dich zu bezahlen?",
+         "[ ] Ja   [ ] Nein   [ ] nur mit meiner Erlaubnis",
+         "Ja. Die Lizenz ist gebuehrenfrei, und deine Inhalte trainieren TikToks KI."),
+    ]
+    for q, opts, ans in items:
+        p = doc.add_paragraph()
+        p.paragraph_format.space_before = Pt(6)
+        p.paragraph_format.space_after = Pt(2)
+        r = p.add_run(f"  >  {q}")
+        r.font.size = Pt(11)
+        r.font.bold = True
+        r.font.color.rgb = DARK
+        p2 = doc.add_paragraph()
+        p2.paragraph_format.left_indent = Cm(0.5)
+        p2.paragraph_format.space_after = Pt(2)
+        r2 = p2.add_run(opts)
+        r2.font.size = Pt(11)
+        r2.font.color.rgb = GREY
+        if loesungen:
+            p3 = doc.add_paragraph()
+            p3.paragraph_format.left_indent = Cm(0.5)
+            p3.paragraph_format.space_after = Pt(6)
+            r3 = p3.add_run("Loesung:  " + ans)
+            r3.font.size = Pt(10)
+            r3.font.bold = True
+            r3.font.color.rgb = GREEN
+
+    # ──────────────────────────────────────────────────────────
+    # AUFGABE 2 - Notizen waehrend der Praesentation
+    # ──────────────────────────────────────────────────────────
+    aufgabe_header(doc, 2, "Mitschreiben waehrend der Praesentation", color=TT_RED)
+    add_para(doc, "Notiere pro Bereich mindestens 2 Aha-Momente, die dich am meisten ueberraschen.",
+             italic=True, color=GREY, space_after=8)
+
+    bereiche = [
+        ("Deine Videos (Lizenz & KI):", TT_CYAN, [
+            "Lizenz: weltweit, gebuehrenfrei, uebertragbar, unterlizenzierbar - du bekommst nichts.",
+            "Deine Inhalte (Gesicht, Stimme, gesprochene Woerter) trainieren TikToks KI/Algorithmen.",
+        ]),
+        ("Algorithmus & Daten:", TT_RED, [
+            "Automatisch gesammelt: Tipprhythmus, Standort, In-App-Browsing, Verweildauer.",
+            "Der 'Fuer dich'-Feed ist endlos und so gebaut, dass man moeglichst lange dranbleibt.",
+        ]),
+        ("Datenweitergabe:", TT_PURPLE, [
+            "Konzern-Firmen im Ausland und Behoerden koennen Zugriff bekommen.",
+            "2025: 530 Mio. EUR Strafe, weil EU-Daten aus China abrufbar/dort gespeichert waren.",
+        ]),
+        ("Geld:", TT_GOLD, [
+            "LIVE-Geschenke = echtes Geld ueber Coins; TikTok behaelt rund die Haelfte.",
+            "Account loeschen heisst nicht 'alles weg' - die Lizenz bleibt bestehen.",
+        ]),
+    ]
+    for titel, farbe, punkte in bereiche:
+        add_para(doc, titel, bold=True, color=farbe, size=12, space_after=4, space_before=6)
+        if loesungen:
+            for line in punkte:
+                add_para(doc, "- " + line, size=10, color=DARK, space_after=2)
+        else:
+            add_lines(doc, 3)
+
+    # ──────────────────────────────────────────────────────────
+    # AUFGABE 3 - Tabelle Mythos vs. AGB-Realitaet
+    # ──────────────────────────────────────────────────────────
+    aufgabe_header(doc, 3, "Mythos vs. AGB-Realitaet", color=TT_CYAN)
+    add_para(doc, "Links steht, was viele glauben. Schreibe rechts, was wirklich in den AGB / in der Realitaet gilt.",
+             italic=True, color=GREY, space_after=8)
+
+    headers = ["Das denken viele", "Was die AGB / Realitaet sagen"]
+    rows_data = [
+        ("Meine Videos gehoeren nur mir.",
+         "Ja - aber TikTok bekommt eine kostenlose, weltweite, uebertragbare Lizenz darauf."),
+        ("TikTok verdient nichts an meinen Videos.",
+         "Doch: Lizenz gebuehrenfrei fuer dich; deine Inhalte trainieren die KI."),
+        ("TikTok weiss nur, was ich like.",
+         "Auch Tipprhythmus, Standort, In-App-Browsing und jede Sekunde Verweildauer."),
+        ("Meine Daten bleiben in Europa.",
+         "Zugriff aus China moeglich - 530 Mio. EUR EU-Strafe 2025."),
+        ("LIVE-Geschenke sind nur Spass.",
+         "Echtes Geld; TikTok behaelt rund 50 %; empfangen erst ab 18."),
+        ("Account loeschen = alles weg.",
+         "Nein, nicht sofort/komplett; die Lizenz bleibt bestehen."),
+    ]
+
+    table = doc.add_table(rows=len(rows_data) + 1, cols=2)
+    table.style = "Light Grid Accent 1"
+    widths = [Cm(6.5), Cm(10.0)]
+    for i, w in enumerate(widths):
+        table.columns[i].width = w
+
+    for i, h in enumerate(headers):
+        c = table.rows[0].cells[i]
+        c.width = widths[i]
+        c.text = ""
+        para = c.paragraphs[0]
+        run = para.add_run(h)
+        run.font.bold = True
+        run.font.size = Pt(10.5)
+        run.font.color.rgb = RGBColor(0xFF, 0xFF, 0xFF)
+        shade_cell(c, "E11D48" if i == 0 else "0C8C88")
+
+    for ri, (mythos, real) in enumerate(rows_data, start=1):
+        c0 = table.rows[ri].cells[0]
+        c0.text = ""
+        c0.width = widths[0]
+        p = c0.paragraphs[0]
+        r = p.add_run(mythos)
+        r.font.size = Pt(10)
+        r.font.italic = True
+
+        c1 = table.rows[ri].cells[1]
+        c1.text = ""
+        c1.width = widths[1]
+        p = c1.paragraphs[0]
+        if loesungen:
+            r = p.add_run(real)
+            r.font.size = Pt(9.5)
+            r.font.color.rgb = DARK
+        else:
+            r = p.add_run(" ")
+            r.font.size = Pt(10)
+
+    # ──────────────────────────────────────────────────────────
+    # AUFGABE 4 - Reflexion
+    # ──────────────────────────────────────────────────────────
+    aufgabe_header(doc, 4, "Reflexion - deine Meinung zaehlt", color=TT_GOLD)
+    add_para(doc, "Beantworte zwei der folgenden vier Fragen ausfuehrlich (je 3-5 Saetze).",
+             italic=True, color=GREY, space_after=8)
+
+    fragen = [
+        "1. Wuerdest du diese AGB unterschreiben, wenn man sie dir auf Papier vorlegt? Begruende.",
+        "2. Was machst du ab heute anders auf TikTok? Nenne mindestens zwei konkrete Schritte.",
+        "3. Sollte der personalisierte 'Fuer dich'-Feed fuer Jugendliche standardmaessig aus sein? Pro/Kontra.",
+        "4. Was bedeutet es fuer dich, dass TikTok deine Videos 'gebuehrenfrei und weltweit' nutzen darf?",
+    ]
+
+    if loesungen:
+        erwart = [
+            ("1.", "Erwartung: Erkennen, dass niemand einen so langen Vertrag ungelesen unterschreiben wuerde - Bewusstsein fuer die Ungleichheit zwischen Nutzer und Konzern."),
+            ("2.", "Erwartung: Konkrete Schritte wie Konto auf privat, personalisierten Feed aus, Standort aus, Links extern oeffnen, Bildschirmzeit-Limit, keine Coins kaufen, bewusster posten."),
+            ("3.", "Erwartung: Pro (Schutz vor Sucht-Schleife, Jugendschutz) und Kontra (Selbstbestimmung, weniger relevante Inhalte). Keine richtige Antwort - bewertet wird die Argumentationstiefe."),
+            ("4.", "Erwartung: Verstaendnis, dass man die kreative Arbeit kostenlos und weltweit an einen Konzern verschenkt, der damit Geld verdienen darf - Wert der eigenen Inhalte."),
+        ]
+        for nr, txt in erwart:
+            add_para(doc, txt, size=10, color=GREY, italic=True, space_after=8)
+    else:
+        for f in fragen:
+            add_para(doc, f, size=11, bold=True, color=DARK, space_after=4)
+            add_lines(doc, 4)
+            doc.add_paragraph().paragraph_format.space_after = Pt(2)
+
+    # ──────────────────────────────────────────────────────────
+    # FOOTER
+    # ──────────────────────────────────────────────────────────
+    doc.add_paragraph().paragraph_format.space_before = Pt(20)
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    r = p.add_run("Quellen: TikTok-Nutzungsbedingungen (EU) - TikTok-Datenschutzrichtlinie - "
+                  "Irish Data Protection Commission (2025) - Verbraucherzentrale.de")
+    r.font.size = Pt(8)
+    r.font.italic = True
+    r.font.color.rgb = GREY
+
+    return doc
+
+
+if __name__ == "__main__":
+    import os
+    out_dir = os.path.dirname(os.path.abspath(__file__))
+
+    ab = baue_arbeitsblatt(loesungen=False)
+    ab_path = f"{out_dir}/Arbeitsblatt_TikTok_AGB.docx"
+    ab.save(ab_path)
+    print(f"OK Arbeitsblatt gespeichert: {ab_path}")
+
+    lo = baue_arbeitsblatt(loesungen=True)
+    lo_path = f"{out_dir}/Arbeitsblatt_TikTok_AGB_Loesungen.docx"
+    lo.save(lo_path)
+    print(f"OK Loesungsblatt gespeichert: {lo_path}")

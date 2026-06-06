@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Was du wirklich zustimmst – TikTok-AGB für die 7./8. Klasse</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg: #0a0e16;
+  --bg-card: rgba(255,255,255,0.04);
+  --bg-card-hover: rgba(255,255,255,0.08);
+  --text: #e8eaf0;
+  --text-dim: #b3bbc9;       /* heller fuer Beamer (Kontrast ~7:1) */
+  --text-dimmer: #8e99ab;    /* nur fuer sehr dezente Hinweise */
+  --cyan: #25F4EE;           /* TikTok-Cyan */
+  --cyan-dim: #1fcfca;
+  --red: #FE2C55;            /* TikTok-Rot, auch fuer Warnungen */
+  --purple: #a855f7;
+  --gold: #f5b800;
+  --green: #22c55e;          /* positiv / gute Nachricht */
+  --orange: #f97316;
+  --transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 19px; }  /* Beamer-Basis: alles in rem skaliert ~19% groesser als Default */
+html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }
+h1, h2, h3, h4, h5 { font-family: 'Outfit', sans-serif; }
+
+#progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px; z-index: 1000;
+  background: linear-gradient(90deg, var(--cyan), var(--red), var(--gold));
+  transition: width 0.4s ease;
+}
+
+#nav-dots {
+  position: fixed; right: 24px; top: 50%; transform: translateY(-50%); z-index: 900;
+  display: flex; flex-direction: column; gap: 6px; align-items: center;
+}
+.nav-dot {
+  width: 10px; height: 10px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3);
+  background: transparent; cursor: pointer; transition: all 0.3s ease;
+}
+.nav-dot.active { transform: scale(1.3); }
+.nav-dot:hover { border-color: rgba(255,255,255,0.7); transform: scale(1.2); }
+
+#slide-counter {
+  position: fixed; bottom: 24px; right: 28px; z-index: 900;
+  font-family: 'Outfit', sans-serif; font-size: 13px; color: var(--text-dim); letter-spacing: 1px;
+}
+
+.nav-arrow {
+  position: fixed; top: 50%; z-index: 900; transform: translateY(-50%);
+  width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05); color: var(--text-dim); font-size: 20px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s ease; backdrop-filter: blur(8px);
+}
+.nav-arrow:hover { background: rgba(255,255,255,0.12); color: #fff; border-color: rgba(255,255,255,0.3); }
+#arrow-left { left: 20px; }
+#arrow-right { right: 60px; }
+
+#overview-btn {
+  position: fixed; bottom: 24px; left: 28px; z-index: 900;
+  width: 36px; height: 36px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05); color: var(--text-dim); font-size: 16px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;
+}
+#overview-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+#slides-container { width: 100vw; height: 100vh; position: relative; }
+.slide {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  display: flex; align-items: flex-start; justify-content: center;
+  opacity: 0; transform: translateX(60px); pointer-events: none;
+  transition: opacity var(--transition), transform var(--transition);
+  padding: 60px 100px 60px 60px; overflow-y: auto; -webkit-overflow-scrolling: touch;
+}
+.slide.active { opacity: 1; transform: translateX(0); pointer-events: all; }
+.slide.exit-left { opacity: 0; transform: translateX(-60px); }
+
+.title-slide, .section-intro {
+  align-items: center; justify-content: flex-start;
+}
+.title-content, .section-intro-content, .slide > .content-wrap { margin-block: auto; }
+
+#slides-container.overview {
+  display: flex; flex-wrap: wrap; gap: 16px; padding: 40px; overflow-y: auto;
+  align-items: flex-start; justify-content: center;
+}
+#slides-container.overview .slide {
+  position: relative; width: 280px; height: 180px; opacity: 1;
+  transform: scale(1) translateX(0); pointer-events: all;
+  border: 2px solid rgba(255,255,255,0.1); border-radius: 12px;
+  cursor: pointer; transition: all 0.3s ease; padding: 12px;
+  flex-shrink: 0; overflow: hidden;
+}
+#slides-container.overview .slide:hover { border-color: rgba(255,255,255,0.3); transform: scale(1.05); }
+#slides-container.overview .slide.active { border-color: var(--cyan); }
+#slides-container.overview .slide * { transform: scale(0.25); transform-origin: top left; pointer-events: none; }
+
+/* TITLE */
+.title-slide { flex-direction: column; text-align: center; position: relative; overflow: hidden; }
+.title-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background: radial-gradient(ellipse at 30% 50%, rgba(37,244,238,0.16) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 30%, rgba(254,44,85,0.14) 0%, transparent 50%),
+              radial-gradient(ellipse at 50% 80%, rgba(245,184,0,0.08) 0%, transparent 50%);
+}
+.title-orb { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.4; animation: float 8s ease-in-out infinite; }
+.title-orb:nth-child(1) { width: 300px; height: 300px; background: var(--cyan); top: 10%; left: 15%; animation-delay: 0s; }
+.title-orb:nth-child(2) { width: 250px; height: 250px; background: var(--red); top: 50%; right: 20%; animation-delay: -3s; }
+.title-orb:nth-child(3) { width: 200px; height: 200px; background: var(--gold); bottom: 15%; left: 40%; animation-delay: -5s; }
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.05); }
+  66% { transform: translate(-20px, 15px) scale(0.95); }
+}
+.title-content { position: relative; z-index: 1; }
+.title-content h1 {
+  font-size: 4rem; font-weight: 800; letter-spacing: -1px; line-height: 1.05;
+  background: linear-gradient(135deg, #fff 0%, var(--cyan) 45%, var(--red) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  margin-bottom: 20px;
+}
+.title-content .subtitle { font-size: 1.4rem; color: var(--text-dim); font-weight: 300; margin-bottom: 40px; line-height: 1.5; }
+.title-content .author { font-size: 0.85rem; color: rgba(255,255,255,0.65); letter-spacing: 3px; text-transform: uppercase; }
+.title-tags { display: flex; gap: 12px; justify-content: center; margin-top: 32px; flex-wrap: wrap; }
+.title-tag { padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500; border: 1px solid; opacity: 0.85; }
+
+/* SECTION INTRO */
+.section-intro { flex-direction: column; text-align: center; }
+.section-number {
+  font-family: 'Outfit', sans-serif; font-size: 9rem; font-weight: 800;
+  opacity: 0.07; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -60%); line-height: 1;
+}
+.section-intro-content { position: relative; z-index: 1; max-width: 760px; }
+.section-icon { font-size: 4rem; margin-bottom: 24px; display: block; animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+.section-intro-content h2 { font-size: 3rem; font-weight: 700; margin-bottom: 28px; letter-spacing: -0.5px; }
+.section-quote {
+  font-size: 1.2rem; font-style: italic; line-height: 1.7; color: var(--text-dim);
+  border-left: 3px solid; padding-left: 24px; text-align: left; max-width: 600px; margin: 0 auto;
+}
+
+/* CONTENT */
+.content-wrap { width: 100%; max-width: 1200px; }
+.content-wrap > h2 {
+  font-size: 2.2rem; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.3px;
+}
+.content-wrap > .lead {
+  font-size: 1.05rem; color: var(--text-dim); margin-bottom: 32px; max-width: 800px; line-height: 1.6;
+}
+.content-grid { display: grid; gap: 16px; }
+
+/* CARDS */
+.fact-card {
+  background: var(--bg-card); border-radius: 14px; padding: 22px 26px;
+  border: 1px solid rgba(255,255,255,0.07); transition: all 0.3s ease;
+  display: flex; gap: 18px; align-items: flex-start; margin-bottom: 12px;
+}
+.fact-card:hover { background: var(--bg-card-hover); transform: translateX(4px); }
+.fact-num {
+  width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center;
+  justify-content: center; font-weight: 700; font-size: 1rem; flex-shrink: 0;
+  font-family: 'Outfit', sans-serif;
+}
+.fact-body { flex: 1; min-width: 0; }
+.fact-body h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; line-height: 1.3; }
+.fact-body p { font-size: 1.05rem; color: var(--text-dim); line-height: 1.6; }
+.fact-body p strong { color: var(--text); font-weight: 600; }
+
+/* WARN / GOOD / INFO BOXES */
+.warn-box {
+  background: rgba(254,44,85,0.10); border: 1px solid rgba(254,44,85,0.3);
+  border-radius: 14px; padding: 22px 26px; margin-bottom: 14px;
+}
+.warn-box h4 { color: var(--red); font-size: 1.05rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.warn-box p { font-size: 1.05rem; color: var(--text-dim); line-height: 1.6; }
+.warn-box p strong { color: #ffd0d8; }
+
+.good-box {
+  background: rgba(34,197,94,0.10); border: 1px solid rgba(34,197,94,0.3);
+  border-radius: 14px; padding: 22px 26px; margin-bottom: 14px;
+}
+.good-box h4 { color: var(--green); font-size: 1.05rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.good-box p { font-size: 1.05rem; color: var(--text-dim); line-height: 1.6; }
+.good-box p strong { color: #d8f7e1; }
+
+.info-box {
+  background: rgba(37,244,238,0.08); border: 1px solid rgba(37,244,238,0.25);
+  border-radius: 14px; padding: 18px 22px; margin-top: 16px;
+}
+.info-box p { font-size: 1.02rem; color: var(--text-dim); line-height: 1.6; }
+.info-box p strong { color: var(--cyan); font-weight: 600; }
+
+/* QUIZ / REVEAL */
+.quiz-card {
+  background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 18px;
+  padding: 28px 32px; margin-bottom: 16px; cursor: pointer;
+  transition: all 0.3s ease;
+}
+.quiz-card:hover { border-color: rgba(255,255,255,0.25); }
+.quiz-q {
+  font-size: 1.15rem; font-weight: 600; line-height: 1.5; display: flex; gap: 14px; align-items: flex-start;
+}
+.quiz-icon { font-size: 1.5rem; flex-shrink: 0; }
+.quiz-a {
+  max-height: 0; overflow: hidden; transition: max-height 0.5s ease, margin-top 0.3s ease;
+  font-size: 1.08rem; color: var(--text-dim); line-height: 1.65;
+  margin-top: 0;
+}
+.quiz-card.open .quiz-a {
+  max-height: 900px; margin-top: 18px;
+  border-top: 1px dashed rgba(255,255,255,0.15); padding-top: 18px;
+}
+.quiz-card .reveal-hint {
+  font-size: 0.88rem; color: rgba(255,255,255,0.4); margin-top: 12px;
+  letter-spacing: 1px; text-transform: uppercase; font-family: 'Outfit', sans-serif;
+}
+.quiz-card.open .reveal-hint { display: none; }
+.quiz-a strong { color: #fff; }
+.quiz-a .punchline {
+  display: block; margin-top: 12px; padding: 12px 16px;
+  background: rgba(254,44,85,0.12); border-left: 3px solid var(--red); border-radius: 6px;
+  color: #ffd6de; font-weight: 500;
+}
+
+/* AGB QUOTES */
+.agb-quote {
+  background: rgba(0,0,0,0.3); border-left: 3px solid rgba(255,255,255,0.3);
+  padding: 14px 18px; margin: 14px 0; border-radius: 6px;
+  font-family: 'Inter', monospace; font-size: 1rem; color: rgba(255,255,255,0.92);
+  line-height: 1.6; font-style: italic;
+}
+.agb-quote::before {
+  content: "AGB-Originaltext (sinngemaess uebersetzt)"; display: block;
+  font-family: 'Outfit', sans-serif; font-style: normal;
+  font-size: 0.82rem; letter-spacing: 1px; text-transform: uppercase;
+  color: rgba(255,255,255,0.45); margin-bottom: 8px;
+}
+
+/* COMPARE TABLE */
+.compare-table {
+  width: 100%; border-collapse: separate; border-spacing: 0;
+  background: var(--bg-card); border-radius: 14px; overflow: hidden;
+  font-size: 1.05rem; margin-top: 8px;
+}
+.compare-table th, .compare-table td {
+  padding: 14px 18px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.06);
+  vertical-align: top;
+}
+.compare-table th {
+  background: rgba(255,255,255,0.03); font-weight: 600;
+  font-family: 'Outfit', sans-serif; letter-spacing: 0.3px; font-size: 0.95rem;
+}
+.compare-table th:nth-child(1) { color: var(--red); }
+.compare-table th:nth-child(2) { color: var(--cyan); }
+.compare-table tr:last-child td { border-bottom: none; }
+.compare-table tr:hover { background: rgba(255,255,255,0.02); }
+.compare-table .myth { color: #ffd6de; }
+.compare-table .real { color: #fff; font-weight: 500; }
+.compare-table small { display: block; color: var(--text-dim); font-size: 0.9rem; margin-top: 3px; line-height: 1.4; }
+
+/* TAGS */
+.tag {
+  display: inline-block; padding: 3px 10px; border-radius: 6px;
+  font-size: 0.88rem; font-weight: 600; font-family: 'Outfit', sans-serif;
+  margin: 0 2px;
+}
+.tag-warn { background: rgba(254,44,85,0.15); color: var(--red); }
+.tag-info { background: rgba(37,244,238,0.15); color: var(--cyan); }
+.tag-cyan { background: rgba(37,244,238,0.15); color: var(--cyan); }
+.tag-red { background: rgba(254,44,85,0.15); color: var(--red); }
+.tag-purple { background: rgba(168,85,247,0.18); color: var(--purple); }
+.tag-gold { background: rgba(245,184,0,0.18); color: var(--gold); }
+
+/* HOOK STAT */
+.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 24px; }
+.stat-card {
+  background: var(--bg-card); border-radius: 14px; padding: 24px;
+  border: 1px solid rgba(255,255,255,0.06); text-align: center;
+}
+.stat-num {
+  font-family: 'Outfit', sans-serif; font-size: 2.6rem; font-weight: 800;
+  background: linear-gradient(135deg, #fff, var(--cyan));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  line-height: 1.1; margin-bottom: 6px;
+}
+.stat-label { font-size: 1rem; color: var(--text-dim); line-height: 1.45; }
+.stat-card.big-fine .stat-num {
+  font-size: 4rem;
+  background: linear-gradient(135deg, #fff, var(--red));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+/* TIPS LIST */
+.tips-list { list-style: none; padding: 0; }
+.tips-list li {
+  background: var(--bg-card); border-radius: 12px; padding: 16px 20px;
+  margin-bottom: 10px; border-left: 3px solid var(--cyan);
+  font-size: 1.08rem; line-height: 1.6; color: var(--text);
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.tips-list li .tip-icon { font-size: 1.4rem; flex-shrink: 0; }
+.tips-list li strong { color: var(--cyan); font-weight: 600; }
+
+/* THEME COLORS — eine Farbe pro Schwerpunkt */
+.theme-lizenz .fact-num { background: rgba(37,244,238,0.16); color: var(--cyan); }
+.theme-lizenz .section-quote { border-color: var(--cyan); }
+.theme-lizenz .section-intro-content h2 { color: var(--cyan); }
+.theme-lizenz .content-wrap > h2 { color: var(--cyan); }
+.theme-lizenz .tips-list li { border-left-color: var(--cyan); }
+.theme-lizenz .tips-list li strong { color: var(--cyan); }
+
+.theme-algo .fact-num { background: rgba(254,44,85,0.16); color: var(--red); }
+.theme-algo .section-quote { border-color: var(--red); }
+.theme-algo .section-intro-content h2 { color: var(--red); }
+.theme-algo .content-wrap > h2 { color: var(--red); }
+.theme-algo .tips-list li { border-left-color: var(--red); }
+.theme-algo .tips-list li strong { color: var(--red); }
+
+.theme-daten .fact-num { background: rgba(168,85,247,0.18); color: var(--purple); }
+.theme-daten .section-quote { border-color: var(--purple); }
+.theme-daten .section-intro-content h2 { color: var(--purple); }
+.theme-daten .content-wrap > h2 { color: var(--purple); }
+.theme-daten .tips-list li { border-left-color: var(--purple); }
+.theme-daten .tips-list li strong { color: var(--purple); }
+
+.theme-geld .fact-num { background: rgba(245,184,0,0.18); color: var(--gold); }
+.theme-geld .section-quote { border-color: var(--gold); }
+.theme-geld .section-intro-content h2 { color: var(--gold); }
+.theme-geld .content-wrap > h2 { color: var(--gold); }
+.theme-geld .tips-list li { border-left-color: var(--gold); }
+.theme-geld .tips-list li strong { color: var(--gold); }
+
+.theme-sum .content-wrap > h2 { color: var(--cyan); }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+/* ════════════════════════════════════════════════════
+   SCHAETZ-MECHANIK (Quiz-Karten)
+   ════════════════════════════════════════════════════ */
+.guess-zone {
+  background: rgba(255,255,255,0.04); border: 1px dashed rgba(255,255,255,0.18);
+  border-radius: 12px; padding: 16px 20px; margin-top: 14px;
+  transition: all 0.4s ease;
+}
+.quiz-card.guessed .guess-zone {
+  background: rgba(255,255,255,0.06); border-style: solid;
+  border-color: rgba(255,255,255,0.12);
+}
+.guess-zone-label {
+  font-family: 'Outfit', sans-serif; font-size: 0.88rem;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--text-dim); margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.guess-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+.guess-btn {
+  padding: 12px 22px; border-radius: 10px; cursor: pointer;
+  font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 1rem;
+  background: rgba(255,255,255,0.08); color: var(--text);
+  border: 1px solid rgba(255,255,255,0.18);
+  transition: all 0.25s ease; min-width: 100px; min-height: 44px;
+}
+.guess-btn:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.35); transform: translateY(-1px); }
+.guess-btn.selected {
+  background: rgba(37,244,238,0.20); border-color: var(--cyan); color: #fff;
+  box-shadow: 0 0 0 2px rgba(37,244,238,0.15);
+}
+.guess-btn.correct { background: rgba(34,197,94,0.22); border-color: var(--green); color: #fff; }
+.guess-btn.wrong { background: rgba(254,44,85,0.18); border-color: var(--red); color: #fff; opacity: 0.85; }
+
+.guess-slider-wrap { padding: 4px 0 8px; }
+.guess-slider {
+  width: 100%; height: 36px; -webkit-appearance: none; appearance: none;
+  background: transparent; cursor: pointer;
+}
+.guess-slider:focus { outline: none; }
+.guess-slider::-webkit-slider-runnable-track { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; }
+.guess-slider::-moz-range-track { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; }
+.guess-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--cyan); border: 3px solid #fff;
+  margin-top: -9px; cursor: grab; box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.guess-slider::-moz-range-thumb {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--cyan); border: 3px solid #fff;
+  cursor: grab; box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.guess-slider-value {
+  text-align: center; font-family: 'Outfit', sans-serif;
+  font-size: 1.6rem; font-weight: 700; color: var(--cyan);
+  margin-top: 6px; font-variant-numeric: tabular-nums;
+}
+.guess-slider-scale {
+  display: flex; justify-content: space-between;
+  font-size: 0.78rem; color: var(--text-dim);
+  margin-top: 4px; padding: 0 4px;
+}
+.guess-confirm {
+  margin-top: 14px; padding: 11px 22px; border-radius: 10px;
+  background: var(--cyan); color: #06222020;
+  color: #07201f;
+  border: none; font-family: 'Outfit', sans-serif; font-weight: 700;
+  font-size: 0.95rem; cursor: pointer; transition: all 0.2s ease;
+  min-height: 44px;
+}
+.guess-confirm:hover { filter: brightness(1.1); }
+.guess-confirm:disabled { opacity: 0.4; cursor: not-allowed; }
+.quiz-card.guessed .guess-confirm { display: none; }
+
+.guess-feedback {
+  display: none; margin-top: 12px; font-size: 0.95rem;
+  font-family: 'Outfit', sans-serif; line-height: 1.5;
+}
+.quiz-card.guessed .guess-feedback { display: block; }
+.guess-feedback .your-tip { color: var(--text-dim); }
+.guess-feedback .real-answer { color: #fff; font-weight: 600; }
+.quiz-card.guessed .reveal-hint { color: var(--cyan); }
+
+/* ════════════════════════════════════════════════════
+   AGB-WORT-DECODER
+   ════════════════════════════════════════════════════ */
+.agb-decoder {
+  background: rgba(0,0,0,0.3); border-left: 3px solid rgba(255,255,255,0.3);
+  padding: 14px 18px; margin: 14px 0; border-radius: 6px;
+  font-family: 'Inter', monospace; font-size: 1rem;
+  color: rgba(255,255,255,0.92);
+  line-height: 1.7; font-style: italic;
+}
+.agb-decoder::before {
+  content: "AGB-Originaltext - klick die markierten Woerter"; display: block;
+  font-family: 'Outfit', sans-serif; font-style: normal;
+  font-size: 0.82rem; letter-spacing: 1px; text-transform: uppercase;
+  color: rgba(255,255,255,0.6); margin-bottom: 10px;
+}
+.decode-word {
+  background: rgba(168,85,247,0.18); color: #d8b4fe;
+  padding: 1px 6px; border-radius: 4px; font-style: normal;
+  font-weight: 600; cursor: pointer; border-bottom: 1.5px dashed var(--purple);
+  transition: all 0.2s ease; user-select: none;
+}
+.decode-word:hover { background: rgba(168,85,247,0.32); color: #fff; }
+.decode-word.opened { background: rgba(168,85,247,0.32); color: #fff; border-bottom-style: solid; }
+.decode-translation {
+  display: none; margin-top: 12px; padding: 12px 16px;
+  background: rgba(168,85,247,0.10); border-left: 3px solid var(--purple);
+  border-radius: 6px; font-style: normal; font-family: 'Inter', sans-serif;
+  font-size: 1rem; color: #f3e8ff; line-height: 1.6;
+}
+.decode-translation strong { color: #fff; }
+.decode-translation.show { display: block; animation: fade-in 0.3s ease; }
+@keyframes fade-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ════════════════════════════════════════════════════
+   COINS-RECHNER (LIVE-Geschenke)
+   ════════════════════════════════════════════════════ */
+.coins-calc {
+  background: var(--bg-card); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px; padding: 22px 26px; margin-top: 16px;
+}
+.coins-calc-title {
+  font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 1.05rem;
+  margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+}
+.coins-slider-wrap { margin-bottom: 18px; }
+.coins-slider {
+  width: 100%; height: 34px; -webkit-appearance: none; appearance: none;
+  background: transparent; cursor: pointer;
+}
+.coins-slider:focus { outline: none; }
+.coins-slider::-webkit-slider-runnable-track { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; }
+.coins-slider::-moz-range-track { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; }
+.coins-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--gold); border: 3px solid #fff;
+  margin-top: -9px; cursor: grab; box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.coins-slider::-moz-range-thumb {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--gold); border: 3px solid #fff;
+  cursor: grab; box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.coins-amount {
+  text-align: center; font-family: 'Outfit', sans-serif;
+  font-size: 1.3rem; font-weight: 700; color: var(--gold);
+  margin-top: 8px; font-variant-numeric: tabular-nums;
+}
+.coins-flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.coins-box {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 16px; text-align: center;
+}
+.coins-box-num { font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 800; line-height: 1.1; }
+.coins-box-label { font-size: 0.85rem; color: var(--text-dim); margin-top: 6px; }
+.coins-box.coins-bought .coins-box-num { color: var(--gold); }
+.coins-box.coins-keep .coins-box-num { color: var(--red); }
+.coins-box.coins-get .coins-box-num { color: var(--green); }
+.coins-note { margin-top: 14px; font-size: 0.92rem; color: var(--text-dim); line-height: 1.5; text-align: center; }
+.coins-note strong { color: var(--text); }
+
+/* MOBILE */
+@media (max-width: 768px) {
+  html { font-size: 16px; }  /* auf Mobile zurueck auf normale Basis, sonst sprengt es das Layout */
+  .slide { padding: 56px 16px 88px 16px; }
+  .title-content h1 { font-size: 2.2rem; line-height: 1.15; }
+  .title-content .subtitle { font-size: 0.95rem; }
+  .title-tag { font-size: 0.7rem; padding: 4px 10px; }
+  .title-orb { filter: blur(40px); }
+  .section-icon { font-size: 2.6rem; }
+  .section-intro-content h2 { font-size: 1.9rem; }
+  .section-quote { font-size: 0.95rem; padding-left: 16px; }
+  .content-wrap > h2 { font-size: 1.5rem; }
+  .content-wrap > .lead { font-size: 0.9rem; margin-bottom: 22px; }
+  .fact-card { padding: 16px 18px; gap: 12px; }
+  .fact-num { width: 32px; height: 32px; font-size: 0.9rem; }
+  .fact-body h4 { font-size: 1rem; }
+  .fact-body p { font-size: 0.85rem; }
+  .warn-box, .good-box { padding: 16px 18px; }
+  .warn-box h4, .good-box h4 { font-size: 0.95rem; }
+  .warn-box p, .good-box p { font-size: 0.85rem; }
+  .quiz-card { padding: 20px; }
+  .quiz-q { font-size: 1rem; }
+  .quiz-a { font-size: 0.88rem; }
+  .compare-table { font-size: 0.82rem; display: block; overflow-x: auto; }
+  .compare-table th, .compare-table td { padding: 10px 12px; }
+  .stat-grid { grid-template-columns: 1fr; gap: 12px; }
+  .stat-num { font-size: 2rem; }
+  .stat-card.big-fine .stat-num { font-size: 3rem; }
+  .coins-flow { grid-template-columns: 1fr; }
+  .nav-arrow { width: 40px; height: 40px; font-size: 18px; top: auto; bottom: 14px; transform: none; }
+  #arrow-left { left: 12px; }
+  #arrow-right { right: 12px; }
+  #nav-dots { right: 6px; gap: 4px; }
+  .nav-dot { width: 7px; height: 7px; border-width: 1.5px; }
+  #slide-counter { top: 12px; bottom: auto; right: 14px; font-size: 11px; }
+  #overview-btn { top: 12px; bottom: auto; left: 14px; width: 30px; height: 30px; font-size: 14px; }
+  #slides-container.overview { padding: 20px 12px; gap: 10px; }
+  #slides-container.overview .slide { width: calc(50% - 6px); height: 140px; padding: 8px; }
+}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="nav-dots"></div>
+<div id="slide-counter">1 / 18</div>
+<button class="nav-arrow" id="arrow-left" onclick="prevSlide()">&#8592;</button>
+<button class="nav-arrow" id="arrow-right" onclick="nextSlide()">&#8594;</button>
+<button id="overview-btn" onclick="toggleOverview()" title="Übersicht (Esc)">&#9638;</button>
+
+<div id="slides-container">
+
+<!-- ═══════════ 1: TITLE ═══════════ -->
+<div class="slide title-slide active" data-section="title">
+  <div class="title-bg">
+    <div class="title-orb"></div>
+    <div class="title-orb"></div>
+    <div class="title-orb"></div>
+  </div>
+  <div class="title-content">
+    <h1>Was du wirklich<br>zustimmst</h1>
+    <p class="subtitle">TikTok – ein Blick hinter die AGB.<br>Was du verschenkst, wenn du auf "Ich stimme zu" tippst.</p>
+    <div class="title-tags">
+      <span class="title-tag" style="color:var(--cyan);border-color:rgba(37,244,238,0.5)">🎵 TikTok</span>
+      <span class="title-tag" style="color:var(--red);border-color:rgba(254,44,85,0.5)">📜 AGB</span>
+      <span class="title-tag" style="color:var(--gold);border-color:rgba(245,184,0,0.5)">⚖️ Deine Rechte</span>
+    </div>
+    <p class="author" style="margin-top:40px">Klasse 7 / 8 · Medienbildung · 40 Minuten</p>
+  </div>
+</div>
+
+<!-- ═══════════ 2: HOOK ═══════════ -->
+<div class="slide" data-section="title">
+  <div class="content-wrap">
+    <h2 style="background: linear-gradient(135deg, #fff, var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 2.4rem;">
+      "Ich habe die Bedingungen gelesen und akzeptiere sie."
+    </h2>
+    <p class="lead">
+      Ein Tippen, das Millionen Jugendliche machen, um TikTok zu nutzen. Aber: Hat das wirklich jemand gelesen?
+    </p>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-num">1&nbsp;Mrd.+</div>
+        <div class="stat-label">Menschen nutzen TikTok<br>weltweit aktiv</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">Ø&nbsp;&gt;&nbsp;1&nbsp;Std.</div>
+        <div class="stat-label">verbringen Jugendliche<br><strong>jeden Tag</strong> auf TikTok</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">&lt; 1 %</div>
+        <div class="stat-label">lesen die AGB wirklich –<br>die meisten gar nicht</div>
+      </div>
+    </div>
+
+    <div class="info-box" style="margin-top:24px">
+      <p>👉 <strong>Heutiges Ziel:</strong> Wir lesen die wichtigsten Stellen für dich – damit du weißt, worauf du dich einlässt. Vier Bereiche: <span class="tag tag-cyan">Deine Videos</span> <span class="tag tag-red">Der Algorithmus</span> <span class="tag tag-purple">Deine Daten</span> <span class="tag tag-gold">Das Geld</span></p>
+    </div>
+
+    <div class="info-box" style="margin-top:14px; background:rgba(255,255,255,0.03); border-color:rgba(255,255,255,0.12)">
+      <p style="color:var(--text-dimmer)">ℹ️ <strong style="color:var(--text-dim)">Hinweis:</strong> Die zitierten Stellen stammen aus den TikTok-Nutzungsbedingungen und der Datenschutzrichtlinie (Stand 2026) und sind für euch sinngemäß ins Deutsche übersetzt.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 3: MINDESTALTER (Basis) ═══════════ -->
+<div class="slide theme-lizenz" data-section="title">
+  <div class="content-wrap">
+    <h2 style="color:var(--cyan)">Frage 1: Ab wann darfst du TikTok nutzen?</h2>
+    <p class="lead">Schätze erst mit dem Regler – dann auf die Karte tippen zum Auflösen.</p>
+
+    <div class="quiz-card" data-guess="slider" data-correct="13" data-min="8" data-max="18">
+      <div class="quiz-q"><span class="quiz-icon">🤔</span><span>TikTok sagt selbst: <strong>"Du musst mindestens ___ Jahre alt sein."</strong></span></div>
+      <div class="guess-zone">
+        <div class="guess-zone-label">🎯 Erst schätzen, dann auflösen</div>
+        <div class="guess-slider-wrap">
+          <input type="range" class="guess-slider" min="8" max="18" value="13" step="1">
+          <div class="guess-slider-value"><span data-slider-val>13</span> Jahre</div>
+          <div class="guess-slider-scale"><span>8</span><span>13</span><span>18</span></div>
+        </div>
+        <button class="guess-confirm">Tipp abgeben</button>
+        <div class="guess-feedback">
+          <span class="your-tip">Dein Tipp: <strong data-your-tip>?</strong> Jahre</span> ·
+          <span class="real-answer">Echte AGB-Antwort: 13 Jahre</span>
+        </div>
+      </div>
+      <div class="reveal-hint">▼ Tippen zum Auflösen</div>
+      <div class="quiz-a">
+        <strong>Antwort: 13 Jahre</strong> – so steht es in den TikTok-Nutzungsbedingungen.
+        <div class="agb-quote">"Du darfst die Plattform nur nutzen, wenn du 13 Jahre oder älter bist – für manche Funktionen musst du sogar älter sein."</div>
+        <span class="punchline">⚠️ <strong>Aber Achtung:</strong> In Deutschland sagt die <strong>DSGVO</strong>: Unter 16 brauchst du eigentlich die Zustimmung deiner Eltern. TikTok prüft das Alter aber nicht wirklich – du tippst einfach nur dein Geburtsdatum ein.</span>
+      </div>
+    </div>
+
+    <div class="quiz-card" data-guess="buttons" data-correct="18">
+      <div class="quiz-q"><span class="quiz-icon">🎁</span><span>Und ab wann darfst du bei <strong>TikTok LIVE</strong> streamen und Geschenke (= Geld) bekommen?</span></div>
+      <div class="guess-zone">
+        <div class="guess-zone-label">🎯 Was glaubst du?</div>
+        <div class="guess-buttons">
+          <button class="guess-btn" data-val="13">Ab 13</button>
+          <button class="guess-btn" data-val="16">Ab 16</button>
+          <button class="guess-btn" data-val="18">Ab 18</button>
+        </div>
+        <div class="guess-feedback">
+          <span class="real-answer">Echte AGB-Antwort: erst ab 18 Jahren.</span>
+        </div>
+      </div>
+      <div class="reveal-hint">▼ Tippen zum Auflösen</div>
+      <div class="quiz-a">
+        <strong>Erst ab 18.</strong> Für verschiedene Funktionen gelten verschiedene Altersgrenzen:
+        <div class="agb-quote">"Direktnachrichten: Du musst 16 Jahre oder älter sein. TikTok LIVE: Du musst 18 Jahre oder älter sein, um live zu streamen."</div>
+        <span class="punchline">💡 Merke: TikTok ab 13, Direktnachrichten ab 16, LIVE und Geld-Geschenke ab 18. Zum Geld-Thema kommen wir später noch genauer.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 4: SECTION 1 — WEM GEHÖREN DEINE VIDEOS ═══════════ -->
+<div class="slide section-intro theme-lizenz" data-section="lizenz">
+  <div class="section-number">01</div>
+  <div class="section-intro-content">
+    <span class="section-icon">🎬</span>
+    <h2>Wem gehören deine Videos?</h2>
+    <blockquote class="section-quote">
+      "Du steckst Stunden in deine Videos, Sounds und Texte. Aber wer darf am Ende damit machen, was er will – und wer verdient daran?"
+    </blockquote>
+  </div>
+</div>
+
+<!-- ═══════════ 5: LIZENZ (Decoder) ═══════════ -->
+<div class="slide theme-lizenz" data-section="lizenz">
+  <div class="content-wrap">
+    <h2>Frage 2: Wem gehören deine Videos, Sounds und Texte?</h2>
+    <p class="lead">Alles, was du auf TikTok hochlädst oder erstellst.</p>
+
+    <div class="good-box">
+      <h4>✅ Die gute Nachricht</h4>
+      <p>Deine Inhalte gehören weiterhin <strong>dir</strong>. TikTok sagt sogar ausdrücklich: <em>"Wir besitzen deine Inhalte nicht."</em></p>
+    </div>
+
+    <div class="warn-box">
+      <h4>⚠️ Die andere Seite</h4>
+      <p>Du gibst TikTok aber eine <strong>weltweite, gebührenfreie, übertragbare und unterlizenzierbare Lizenz</strong>. TikTok erklärt jedes dieser Wörter sogar selbst – tippe sie an:</p>
+
+      <div class="agb-decoder">
+        "Du gewährst uns eine
+        <span class="decode-word" data-translate="tt-nichtex">nicht-exklusive</span>,
+        <span class="decode-word" data-translate="tt-gebuehrenfrei">gebührenfreie</span>,
+        <span class="decode-word" data-translate="tt-uebertragbar">übertragbare</span>,
+        <span class="decode-word" data-translate="tt-unterlizenz">unterlizenzierbare</span> und
+        <span class="decode-word" data-translate="tt-weltweit">weltweite</span>
+        Lizenz, um deine Inhalte zu verwenden."
+
+        <div class="decode-translation" data-id="tt-nichtex">
+          🔓 <strong>"nicht-exklusiv"</strong> = TikTok formuliert das so: <em>"das heißt, du kannst deine Inhalte trotzdem auch anderen erlauben."</em> Immerhin.
+        </div>
+        <div class="decode-translation" data-id="tt-gebuehrenfrei">
+          💸 <strong>"gebührenfrei"</strong> = TikToks eigene Erklärung: <em>"das heißt, wir bezahlen dich nicht für diese Lizenz."</em> Du bekommst <strong>keinen Cent</strong>.
+        </div>
+        <div class="decode-translation" data-id="tt-uebertragbar">
+          📦 <strong>"übertragbar"</strong> = TikToks eigene Erklärung: <em>"das heißt, wir können die Rechte, die du uns gibst, an jemand anderen weitergeben."</em>
+        </div>
+        <div class="decode-translation" data-id="tt-unterlizenz">
+          🔁 <strong>"unterlizenzierbar"</strong> = TikToks eigene Erklärung: <em>"das heißt, wir können deine Inhalte an andere lizenzieren"</em> – z. B. an Dienstleister oder Partnerfirmen.
+        </div>
+        <div class="decode-translation" data-id="tt-weltweit">
+          🌍 <strong>"weltweit"</strong> = TikToks eigene Erklärung: <em>"das heißt, die Lizenz gilt überall auf der Welt"</em> – auch in Ländern mit viel weniger Datenschutz.
+        </div>
+      </div>
+
+      <p>Die Lizenz erlaubt TikTok, deine Inhalte zu <strong>kopieren, zu bearbeiten, abgewandelte Versionen zu erstellen</strong> und sie öffentlich zu zeigen.</p>
+    </div>
+
+    <div class="info-box">
+      <p>💡 <strong>Kurz gesagt:</strong> Dir "gehört" dein Video – aber du verschenkst gleichzeitig das Recht, dass TikTok es weltweit und kostenlos nutzen, weitergeben und verändern darf. <span class="tag tag-cyan">Lies die nächste Folie...</span></p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 6: KI-TRAINING ═══════════ -->
+<div class="slide theme-lizenz" data-section="lizenz">
+  <div class="content-wrap">
+    <h2>Frage 3: Trainiert TikTok eine KI mit deinen Videos?</h2>
+    <p class="lead">Deine Inhalte sind nicht nur für deine Follower interessant.</p>
+
+    <div class="quiz-card" data-guess="buttons" data-correct="ja">
+      <div class="quiz-q"><span class="quiz-icon">🤖</span><span>Nutzt TikTok deine Videos, um seine KI und seinen Algorithmus zu trainieren?</span></div>
+      <div class="guess-zone">
+        <div class="guess-zone-label">🎯 Was ist dein Tipp?</div>
+        <div class="guess-buttons">
+          <button class="guess-btn" data-val="nein">Nein</button>
+          <button class="guess-btn" data-val="anonym">Nur anonym</button>
+          <button class="guess-btn" data-val="ja">Ja, ausdrücklich</button>
+        </div>
+        <div class="guess-feedback">
+          <span class="real-answer">Echte AGB-Antwort: Ja – steht so in der Datenschutzrichtlinie.</span>
+        </div>
+      </div>
+      <div class="reveal-hint">▼ Tippen zum Auflösen</div>
+      <div class="quiz-a">
+        <strong>Ja.</strong> TikTok nutzt deine Daten und Inhalte, um seine Technik zu verbessern:
+        <div class="agb-quote">"Wir nutzen die Informationen, die wir haben, um die Plattform zu entwickeln, zu testen und zu verbessern – einschließlich der Entwicklung und Verbesserung unserer Technologie wie unserer Modelle für maschinelles Lernen und Algorithmen."</div>
+        <span class="punchline">🚨 TikTok analysiert sogar den <strong>Inhalt</strong> deiner Videos automatisch – Gesichter, Gegenstände, Umgebung und sogar <strong>die gesprochenen Wörter</strong>.</span>
+        <div class="agb-quote">"… durch das Erkennen von Gegenständen und Umgebung, dem Vorhandensein oder der Position eines Gesichts oder anderer Körperteile in einem Bild sowie dem Text der gesprochenen Wörter."</div>
+      </div>
+    </div>
+
+    <div class="warn-box">
+      <h4>⚠️ Das heißt für dich</h4>
+      <p>Dein Gesicht, deine Stimme und was du sagst, werden nicht nur angezeigt – sie werden <strong>automatisch ausgewertet</strong> und helfen, TikToks KI besser zu machen. Dafür bekommst du nichts.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 7: SECTION 2 — DER ALGORITHMUS ═══════════ -->
+<div class="slide section-intro theme-algo" data-section="algo">
+  <div class="section-number">02</div>
+  <div class="section-intro-content">
+    <span class="section-icon">🧠</span>
+    <h2>Der Algorithmus kennt dich</h2>
+    <blockquote class="section-quote">
+      "TikTok fühlt sich an, als würde es genau wissen, was dir gefällt. Das ist kein Zufall – sondern das Ergebnis von sehr viel gesammelten Daten über dich."
+    </blockquote>
+  </div>
+</div>
+
+<!-- ═══════════ 8: WAS TIKTOK SAMMELT ═══════════ -->
+<div class="slide theme-algo" data-section="algo">
+  <div class="content-wrap">
+    <h2>Frage 4: Was sammelt TikTok über dich – ganz automatisch?</h2>
+    <p class="lead">Auch ohne dass du etwas postest, sammelt die App im Hintergrund.</p>
+
+    <div class="fact-card">
+      <div class="fact-num">1</div>
+      <div class="fact-body">
+        <h4>📱 Gerät &amp; Netzwerk</h4>
+        <p>Gerätemodell, Betriebssystem, IP-Adresse, Sprache – und sogar deine <strong>Tipprhythmen</strong> (wie schnell und in welchem Muster du auf der Tastatur tippst).</p>
+      </div>
+    </div>
+    <div class="fact-card">
+      <div class="fact-num">2</div>
+      <div class="fact-body">
+        <h4>📍 Standort</h4>
+        <p>TikTok ermittelt automatisch deinen <strong>ungefähren Standort</strong> (Land, Region, Stadt) – z. B. über deine SIM-Karte und IP-Adresse.</p>
+      </div>
+    </div>
+    <div class="fact-card">
+      <div class="fact-num">3</div>
+      <div class="fact-body">
+        <h4>🌐 In-App-Browser</h4>
+        <p>Wenn du in TikTok auf einen Link tippst, öffnet sich ein <strong>Browser innerhalb der App</strong> – und TikTok kann mitlesen, was du dort ansiehst.</p>
+      </div>
+    </div>
+    <div class="fact-card">
+      <div class="fact-num">4</div>
+      <div class="fact-body">
+        <h4>👀 Dein Verhalten</h4>
+        <p>Jedes Like, jeder Kommentar – und vor allem: <strong>wie lange du bei jedem Video hängenbleibst</strong>. Genau daraus lernt der Algorithmus.</p>
+      </div>
+    </div>
+
+    <div class="quiz-card" data-guess="buttons" data-correct="wahr" style="margin-top:8px">
+      <div class="quiz-q"><span class="quiz-icon">⌨️</span><span>TikTok misst sogar deinen <strong>Tipprhythmus</strong> – also wie du tippst. Wahr oder falsch?</span></div>
+      <div class="guess-zone">
+        <div class="guess-zone-label">🎯 Dein Tipp?</div>
+        <div class="guess-buttons">
+          <button class="guess-btn" data-val="wahr">Wahr</button>
+          <button class="guess-btn" data-val="falsch">Falsch</button>
+        </div>
+        <div class="guess-feedback">
+          <span class="real-answer">Echte AGB-Antwort: Wahr – steht wörtlich in der Datenschutzrichtlinie.</span>
+        </div>
+      </div>
+      <div class="reveal-hint">▼ Tippen zum Auflösen</div>
+      <div class="quiz-a">
+        <strong>Wahr.</strong> Es steht direkt in der Datenschutzrichtlinie:
+        <div class="agb-quote">"Diese Informationen umfassen dein Gerätemodell, Betriebssystem, Tastenanschlag-Muster oder -Rhythmen, IP-Adresse, Systemsprache und Geräteeinstellungen."</div>
+        <span class="punchline">😳 Dein Tipprhythmus ist fast wie ein Fingerabdruck – man könnte dich daran wiedererkennen, selbst wenn du nicht eingeloggt bist.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 9: FÜR-DICH-FEED & SUCHTDESIGN ═══════════ -->
+<div class="slide theme-algo" data-section="algo">
+  <div class="content-wrap">
+    <h2>Frage 5: Warum kannst du nicht aufhören zu scrollen?</h2>
+    <p class="lead">Der "Für dich"-Feed ist das Herzstück von TikTok – und kein Zufall.</p>
+
+    <div class="info-box" style="margin-top:0">
+      <p>📜 <strong>Was TikTok dazu sagt:</strong> "Wir personalisieren bestimmte Funktionen und Inhalte, zum Beispiel deinen <em>"Für dich"-Feed</em>, der dir Videos zeigt, von denen wir glauben, dass sie dich interessieren."</p>
+    </div>
+
+    <div class="warn-box">
+      <h4>🔁 Wie das funktioniert</h4>
+      <p>Aus jeder Sekunde, die du bei einem Video bleibst, lernt der Algorithmus dazu. Der Feed <strong>hört nie auf</strong> – es gibt kein Ende, keine "letzte Seite". Genau das ist <strong>so gebaut</strong>, dass du möglichst lange dranbleibst. Das ist gut fürs Unternehmen (mehr Werbung), aber nicht unbedingt gut für dich.</p>
+    </div>
+
+    <div class="good-box">
+      <h4>✅ Dein Recht in der EU</h4>
+      <p>Wegen eines EU-Gesetzes (dem <strong>Digital Services Act</strong>) musst du in Europa den personalisierten Feed <strong>abschalten</strong> können. Dann bekommst du Videos, die <em>nicht</em> auf dein Verhalten zugeschnitten sind – ein guter Weg, um die "Sucht-Schleife" zu durchbrechen.</p>
+    </div>
+
+    <div class="info-box">
+      <p>💡 <strong>Tipp:</strong> Stell dir beim Scrollen einmal die Frage: <em>"Will ich das gerade – oder will der Algorithmus, dass ich weitermache?"</em></p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 10: SECTION 3 — WOHIN GEHEN DEINE DATEN ═══════════ -->
+<div class="slide section-intro theme-daten" data-section="daten">
+  <div class="section-number">03</div>
+  <div class="section-intro-content">
+    <span class="section-icon">🌍</span>
+    <h2>Wohin gehen deine Daten?</h2>
+    <blockquote class="section-quote">
+      "Deine Daten bleiben nicht einfach auf deinem Handy. Die Frage ist: Wer kann sie sehen – und in welchem Land liegen sie eigentlich?"
+    </blockquote>
+  </div>
+</div>
+
+<!-- ═══════════ 11: KONZERN & BEHÖRDEN ═══════════ -->
+<div class="slide theme-daten" data-section="daten">
+  <div class="content-wrap">
+    <h2>Frage 6: Wer bekommt deine Daten noch?</h2>
+    <p class="lead">Nicht nur TikTok in Deutschland hat Zugriff.</p>
+
+    <div class="quiz-card" data-guess="buttons" data-correct="ja">
+      <div class="quiz-q"><span class="quiz-icon">🏢</span><span>Können Mitarbeiter des Konzerns <strong>außerhalb Europas</strong> auf deine Daten zugreifen?</span></div>
+      <div class="guess-zone">
+        <div class="guess-zone-label">🎯 Was glaubst du?</div>
+        <div class="guess-buttons">
+          <button class="guess-btn" data-val="nein">Nein, nur EU</button>
+          <button class="guess-btn" data-val="ja">Ja, auch im Ausland</button>
+        </div>
+        <div class="guess-feedback">
+          <span class="real-answer">Echte AGB-Antwort: Ja – Konzern-Firmen im Ausland erhalten Zugriff.</span>
+        </div>
+      </div>
+      <div class="reveal-hint">▼ Tippen zum Auflösen</div>
+      <div class="quiz-a">
+        <strong>Ja.</strong> Andere Firmen des TikTok-Konzerns im Ausland bekommen Zugriff:
+        <div class="agb-quote">"Bestimmte Unternehmen unserer Unternehmensgruppe, die sich außerhalb deines Wohnsitzlandes befinden, erhalten begrenzten Fernzugriff auf diese Informationen, damit sie bestimmte Funktionen bereitstellen können."</div>
+        <span class="punchline">⚖️ Außerdem darf TikTok Daten an <strong>Behörden und Strafverfolgung</strong> weitergeben:</span>
+        <div class="agb-quote">"Wir können die Informationen … mit Strafverfolgungsbehörden, Behörden … teilen, wenn wir in gutem Glauben davon ausgehen, dass dies notwendig ist, um geltendem Recht, einem Rechtsverfahren oder behördlichen Anfragen nachzukommen."</div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <p>💡 Der Mutterkonzern von TikTok heißt <strong>ByteDance</strong> und sitzt in <strong>China</strong>. Genau das hat 2025 zu einem der größten Datenschutz-Fälle Europas geführt – siehe nächste Folie.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 12: CHINA-FALL ═══════════ -->
+<div class="slide theme-daten" data-section="daten">
+  <div class="content-wrap">
+    <h2>Der echte Fall: 530 Millionen Euro Strafe</h2>
+    <p class="lead">Das ist keine Theorie – das ist 2025 wirklich passiert.</p>
+
+    <div class="stat-grid" style="grid-template-columns: 1fr;">
+      <div class="stat-card big-fine">
+        <div class="stat-num">530 Mio. €</div>
+        <div class="stat-label">Strafe für TikTok – verhängt von der irischen Datenschutzbehörde am <strong>2. Mai 2025</strong></div>
+      </div>
+    </div>
+
+    <div class="warn-box" style="margin-top:16px">
+      <h4>🇨🇳 Worum ging es?</h4>
+      <p>Daten von europäischen TikTok-Nutzern konnten <strong>aus China abgerufen</strong> werden. TikTok konnte nicht garantieren, dass diese Daten dort genauso geschützt sind wie in der EU. Das verstößt gegen die <strong>DSGVO</strong>.</p>
+      <p style="margin-top:10px">Besonders heikel: Im Februar 2025 musste TikTok zugeben, dass europäische Nutzerdaten sogar <strong>auf Servern in China gespeichert</strong> waren – obwohl die Firma vorher das Gegenteil behauptet hatte.</p>
+    </div>
+
+    <div class="info-box">
+      <p>💡 <strong>Was heißt das für dich?</strong> "Meine Daten bleiben schon in Europa" stimmt nicht automatisch. Wo deine Daten landen und wer sie sehen kann, entscheidest nicht du – sondern die AGB, denen du zugestimmt hast.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 13: SECTION 4 — DIE GELD-FALLEN ═══════════ -->
+<div class="slide section-intro theme-geld" data-section="geld">
+  <div class="section-number">04</div>
+  <div class="section-intro-content">
+    <span class="section-icon">💰</span>
+    <h2>Die Geld-Fallen</h2>
+    <blockquote class="section-quote">
+      "TikTok ist kostenlos – heißt es. Aber an vielen Stellen geht es um sehr viel echtes Geld. Manchmal um deins."
+    </blockquote>
+  </div>
+</div>
+
+<!-- ═══════════ 14: LIVE-GESCHENKE & COINS (Rechner) ═══════════ -->
+<div class="slide theme-geld" data-section="geld">
+  <div class="content-wrap">
+    <h2>Frage 7: Wenn jemand bei LIVE ein Geschenk schickt – wie viel kommt an?</h2>
+    <p class="lead">Bei TikTok LIVE kann man echte Geschenke schicken. Dafür kauft man vorher "Coins" mit echtem Geld.</p>
+
+    <div class="quiz-card" data-guess="buttons" data-correct="haelfte">
+      <div class="quiz-q"><span class="quiz-icon">🎁</span><span>Ein Fan schickt dir ein Geschenk. Wie viel vom Wert bekommst <strong>du als Creator</strong> am Ende?</span></div>
+      <div class="guess-zone">
+        <div class="guess-zone-label">🎯 Dein Tipp?</div>
+        <div class="guess-buttons">
+          <button class="guess-btn" data-val="fast">Fast alles</button>
+          <button class="guess-btn" data-val="haelfte">Etwa die Hälfte</button>
+          <button class="guess-btn" data-val="viertel">Nur ein Viertel</button>
+        </div>
+        <div class="guess-feedback">
+          <span class="real-answer">Echte Antwort: ungefähr die Hälfte – TikTok behält den Rest.</span>
+        </div>
+      </div>
+      <div class="reveal-hint">▼ Tippen zum Auflösen</div>
+      <div class="quiz-a">
+        <strong>Nur etwa die Hälfte.</strong> Der Weg des Geldes: Fan kauft <strong>Coins</strong> (echtes Geld) → schickt ein Geschenk → das wird in "Diamanten" umgerechnet → Creator kann sie auszahlen. Bei jedem Schritt behält TikTok einen Anteil – am Ende rund <strong>50 %</strong>.
+        <span class="punchline">⚠️ Geschenke empfangen darfst du außerdem erst <strong>ab 18</strong>. Trotzdem geben viele Jüngere echtes Geld für Coins aus, um andere zu beschenken.</span>
+
+        <div class="coins-calc" id="coins-calc">
+          <div class="coins-calc-title">💸 Rechne selbst nach: Wohin fließt das Geld?</div>
+          <div class="coins-slider-wrap">
+            <input type="range" class="coins-slider" id="coins-slider" min="0" max="50" value="10" step="1">
+            <div class="coins-amount">Ein Fan gibt aus: <span id="coins-euro">10</span> €</div>
+          </div>
+          <div class="coins-flow">
+            <div class="coins-box coins-bought">
+              <div class="coins-box-num" id="coins-num">800</div>
+              <div class="coins-box-label">≈ Coins gekauft</div>
+            </div>
+            <div class="coins-box coins-keep">
+              <div class="coins-box-num" id="coins-tt">5 €</div>
+              <div class="coins-box-label">TikTok behält</div>
+            </div>
+            <div class="coins-box coins-get">
+              <div class="coins-box-num" id="coins-creator">5 €</div>
+              <div class="coins-box-label">Creator bekommt</div>
+            </div>
+          </div>
+          <div class="coins-note" id="coins-note">Zieh den Regler und sieh, wie sich echtes Geld aufteilt. (Vereinfachte Beispielrechnung.)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 15: ACCOUNT LÖSCHEN (Basis) ═══════════ -->
+<div class="slide theme-geld" data-section="geld">
+  <div class="content-wrap">
+    <h2>Frage 8: Du löschst deinen Account – sind die Daten weg?</h2>
+    <p class="lead">Eine der häufigsten Fragen – die Antwort überrascht viele.</p>
+
+    <div class="quiz-card" data-guess="buttons" data-correct="nein">
+      <div class="quiz-q"><span class="quiz-icon">🗑️</span><span>Sind nach dem Löschen wirklich <strong>sofort alle</strong> deine Daten weg?</span></div>
+      <div class="guess-zone">
+        <div class="guess-zone-label">🎯 Was glaubst du?</div>
+        <div class="guess-buttons">
+          <button class="guess-btn" data-val="ja">Ja, sofort alles weg</button>
+          <button class="guess-btn" data-val="nein">Nein – nicht sofort/komplett</button>
+        </div>
+        <div class="guess-feedback">
+          <span class="real-answer">Echte AGB-Antwort: Nein – TikTok behält Daten so lange wie "nötig".</span>
+        </div>
+      </div>
+      <div class="reveal-hint">▼ Tippen zum Auflösen</div>
+      <div class="quiz-a">
+        <strong>Nein.</strong> Löschen entfernt deine Inhalte aus der öffentlichen Ansicht – aber nicht alles sofort von den Servern:
+        <div class="agb-quote">"Wir bewahren Informationen so lange auf, wie es notwendig ist, um unsere Dienste bereitzustellen … Manche Daten bewahren wir auch danach auf, wenn dies aus rechtlichen Gründen erforderlich ist."</div>
+        <span class="punchline">⚠️ Und nicht vergessen: Die <strong>Lizenz</strong> aus Bereich 1 – das Recht, deine schon hochgeladenen Inhalte zu nutzen – verschwindet damit nicht einfach.</span>
+        <p style="margin-top:14px">Außerdem: Was andere von deinem Video gespeichert oder weitergeteilt haben (z. B. per Screen-Recording), kannst du gar nicht mehr löschen.</p>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <p>💡 <strong>Faustregel:</strong> Alles, was einmal online war, kann irgendwo weiterleben. Das Beste ist, vorher zu überlegen, <em>was</em> man überhaupt hochlädt.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 16: ZUSAMMENFASSUNG — MYTHOS vs. REALITÄT ═══════════ -->
+<div class="slide theme-sum" data-section="sum">
+  <div class="content-wrap">
+    <h2 style="color:var(--cyan)">Mythos vs. Realität</h2>
+    <p class="lead">Was viele glauben – und was wirklich in den AGB steht.</p>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>🙈 Das denken viele</th>
+          <th>📜 Was die AGB / Realität sagen</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="myth">"Meine Videos gehören nur mir."</td>
+          <td class="real">Ja – aber TikTok bekommt eine <strong>kostenlose, weltweite, übertragbare Lizenz</strong> darauf.</td>
+        </tr>
+        <tr>
+          <td class="myth">"TikTok verdient nichts an meinen Videos."</td>
+          <td class="real">Doch. Die Lizenz ist für dich gebührenfrei – und deine Inhalte trainieren TikToks <strong>KI</strong>.</td>
+        </tr>
+        <tr>
+          <td class="myth">"TikTok weiß nur, was ich like."</td>
+          <td class="real">Auch <strong>Tipprhythmus, Standort, In-App-Browsing</strong> und jede Sekunde Verweildauer.</td>
+        </tr>
+        <tr>
+          <td class="myth">"Meine Daten bleiben in Europa."</td>
+          <td class="real">Zugriff aus China möglich – <strong>530 Mio. € EU-Strafe 2025</strong>.</td>
+        </tr>
+        <tr>
+          <td class="myth">"LIVE-Geschenke sind nur Spaß."</td>
+          <td class="real">Echtes Geld; TikTok behält <strong>~50 %</strong>; empfangen erst ab 18.</td>
+        </tr>
+        <tr>
+          <td class="myth">"Account löschen = alles weg."</td>
+          <td class="real">Nein, nicht sofort/komplett; die <strong>Lizenz bleibt</strong>.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════ 17: WAS KANNST DU TUN ═══════════ -->
+<div class="slide theme-sum" data-section="sum">
+  <div class="content-wrap">
+    <h2 style="color:var(--cyan)">Was kannst du konkret tun?</h2>
+    <p class="lead">Du musst TikTok nicht löschen – aber du kannst es bewusster nutzen.</p>
+
+    <ul class="tips-list">
+      <li><span class="tip-icon">🔒</span><span><strong>Konto auf privat</strong> stellen und einschränken, wer dich sehen und dir schreiben darf.</span></li>
+      <li><span class="tip-icon">🔁</span><span><strong>Personalisierten Feed abschalten</strong> (dein EU-Recht) – das durchbricht die endlose Sucht-Schleife.</span></li>
+      <li><span class="tip-icon">📍</span><span><strong>Standort-Freigabe und Aktivitätsstatus aus</strong> – TikTok muss nicht wissen, wo du gerade bist.</span></li>
+      <li><span class="tip-icon">🌐</span><span><strong>Links lieber extern öffnen</strong> statt im In-App-Browser.</span></li>
+      <li><span class="tip-icon">⏱️</span><span><strong>Bildschirmzeit-Limit setzen</strong> – TikTok hat dafür sogar ein eingebautes Werkzeug.</span></li>
+      <li><span class="tip-icon">💸</span><span><strong>Keine Coins kaufen</strong> – und In-App-Käufe am Handy von den Eltern sperren lassen.</span></li>
+      <li><span class="tip-icon">🧠</span><span><strong>Vor dem Posten kurz überlegen:</strong> Würde ich das auch einem Fremden auf der Straße zeigen?</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════ 18: ABSCHLUSS ═══════════ -->
+<div class="slide title-slide" data-section="title">
+  <div class="title-bg">
+    <div class="title-orb"></div>
+    <div class="title-orb"></div>
+    <div class="title-orb"></div>
+  </div>
+  <div class="title-content">
+    <h1>Du hast jetzt<br>die Wahl.</h1>
+    <p class="subtitle">"Ich stimme zu" ist eine Entscheidung – keine Formalität.<br>Beim nächsten Tippen weißt du, was du tust.</p>
+    <div class="title-tags">
+      <span class="title-tag" style="color:var(--cyan);border-color:rgba(37,244,238,0.5)">🔒 Privatsphäre an</span>
+      <span class="title-tag" style="color:var(--red);border-color:rgba(254,44,85,0.5)">🔁 Feed bewusst</span>
+      <span class="title-tag" style="color:var(--gold);border-color:rgba(245,184,0,0.5)">🧠 Bewusst posten</span>
+    </div>
+    <p class="author" style="margin-top:40px">Quellen: TikTok-Nutzungsbedingungen (EU) · TikTok-Datenschutzrichtlinie · Irish Data Protection Commission (2025) · Verbraucherzentrale</p>
+  </div>
+</div>
+
+</div>
+
+<script>
+let currentSlide = 0;
+let isOverview = false;
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+const navDots = document.getElementById('nav-dots');
+
+// Section-Farben (fuer die Navigations-Punkte)
+const sectionColors = {
+  'title': 'rgba(255,255,255,0.7)',
+  'lizenz': 'var(--cyan)',
+  'algo': 'var(--red)',
+  'daten': 'var(--purple)',
+  'geld': 'var(--gold)',
+  'sum': 'var(--cyan)'
+};
+
+// Navigations-Punkte erzeugen
+slides.forEach((slide, idx) => {
+  const dot = document.createElement('div');
+  dot.className = 'nav-dot';
+  dot.dataset.slide = idx;
+  dot.dataset.section = slide.dataset.section;
+  dot.addEventListener('click', () => goToSlide(idx));
+  navDots.appendChild(dot);
+});
+
+function updateUI() {
+  document.getElementById('progress-bar').style.width = ((currentSlide) / (totalSlides - 1)) * 100 + '%';
+  document.getElementById('slide-counter').textContent = `${currentSlide + 1} / ${totalSlides}`;
+  document.querySelectorAll('.nav-dot').forEach(dot => {
+    const idx = parseInt(dot.dataset.slide);
+    dot.classList.toggle('active', idx === currentSlide);
+    if (idx === currentSlide) {
+      const section = slides[currentSlide].dataset.section;
+      const c = sectionColors[section] || 'rgba(255,255,255,0.7)';
+      dot.style.background = c;
+      dot.style.borderColor = c;
+    } else {
+      dot.style.background = '';
+      dot.style.borderColor = '';
+    }
+  });
+}
+
+function goToSlide(idx, direction) {
+  if (idx < 0 || idx >= totalSlides || idx === currentSlide) return;
+  if (isOverview) { toggleOverview(); }
+  const dir = direction || (idx > currentSlide ? 'next' : 'prev');
+  const prev = currentSlide;
+
+  slides[prev].classList.remove('active');
+  if (dir === 'next') slides[prev].classList.add('exit-left');
+
+  slides[idx].style.transition = 'none';
+  slides[idx].style.opacity = '0';
+  slides[idx].style.transform = dir === 'next' ? 'translateX(60px)' : 'translateX(-60px)';
+  void slides[idx].offsetWidth;
+  slides[idx].style.transition = '';
+  slides[idx].style.opacity = '';
+  slides[idx].style.transform = '';
+  slides[idx].classList.add('active');
+
+  setTimeout(() => { slides[prev].classList.remove('exit-left'); }, 550);
+
+  currentSlide = idx;
+  updateUI();
+}
+
+function nextSlide() { goToSlide(currentSlide + 1, 'next'); }
+function prevSlide() { goToSlide(currentSlide - 1, 'prev'); }
+
+function toggleOverview() {
+  const container = document.getElementById('slides-container');
+  isOverview = !isOverview;
+  if (isOverview) {
+    container.classList.add('overview');
+    slides.forEach((s, i) => {
+      s.classList.add('active');
+      s.style.transform = '';
+      s.onclick = () => { goToSlide(i); };
+    });
+  } else {
+    container.classList.remove('overview');
+    slides.forEach((s, i) => {
+      s.onclick = null;
+      if (i !== currentSlide) s.classList.remove('active');
+    });
+  }
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); prevSlide(); }
+  if (e.key === 'Escape') { e.preventDefault(); toggleOverview(); }
+  if (e.key === 'Home') { e.preventDefault(); goToSlide(0); }
+  if (e.key === 'End') { e.preventDefault(); goToSlide(totalSlides - 1); }
+});
+
+let touchStartX = 0, touchStartY = 0;
+document.addEventListener('touchstart', (e) => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+});
+document.addEventListener('touchend', (e) => {
+  const diffX = touchStartX - e.changedTouches[0].clientX;
+  const diffY = touchStartY - e.changedTouches[0].clientY;
+  if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY)) {
+    diffX > 0 ? nextSlide() : prevSlide();
+  }
+});
+
+updateUI();
+
+/* ════════════════════════════════════════════════════
+   INTERAKTIVE KOMPONENTEN
+   ════════════════════════════════════════════════════ */
+
+/* ---------- QUIZ-KARTEN: Schaetz-Mechanik + Aufloesen ---------- */
+document.querySelectorAll('.quiz-card').forEach(card => {
+  const guessType = card.dataset.guess;
+  const correct = card.dataset.correct;
+
+  function tryReveal() {
+    if (!card.classList.contains('guessed') && card.querySelector('.guess-zone')) return;
+    card.classList.toggle('open');
+  }
+
+  card.querySelector('.reveal-hint')?.addEventListener('click', e => {
+    e.stopPropagation();
+    tryReveal();
+  });
+  card.querySelector('.quiz-q')?.addEventListener('click', e => {
+    e.stopPropagation();
+    tryReveal();
+  });
+
+  if (guessType === 'slider') {
+    const slider = card.querySelector('.guess-slider');
+    const valSpan = card.querySelector('[data-slider-val]');
+    const confirm = card.querySelector('.guess-confirm');
+    const yourTip = card.querySelector('[data-your-tip]');
+    slider.addEventListener('input', () => {
+      valSpan.textContent = slider.value;
+    });
+    confirm.addEventListener('click', e => {
+      e.stopPropagation();
+      if (yourTip) yourTip.textContent = slider.value;
+      slider.disabled = true;
+      card.classList.add('guessed');
+      card.classList.add('open');
+    });
+  }
+
+  if (guessType === 'buttons') {
+    const buttons = card.querySelectorAll('.guess-btn');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        if (card.classList.contains('guessed')) return;
+        const val = btn.dataset.val;
+        buttons.forEach(b => {
+          b.disabled = true;
+          if (b.dataset.val === correct) b.classList.add('correct');
+          else if (b === btn && val !== correct) b.classList.add('wrong');
+        });
+        if (val === correct) btn.classList.add('selected');
+        card.classList.add('guessed');
+        card.classList.add('open');
+      });
+    });
+  }
+});
+
+/* ---------- AGB-WORT-DECODER ---------- */
+document.querySelectorAll('.decode-word').forEach(word => {
+  word.addEventListener('click', e => {
+    e.stopPropagation();
+    const id = word.dataset.translate;
+    const target = word.closest('.agb-decoder').querySelector(`.decode-translation[data-id="${id}"]`);
+    if (!target) return;
+    const wasOpen = target.classList.contains('show');
+    word.closest('.agb-decoder').querySelectorAll('.decode-translation').forEach(t => t.classList.remove('show'));
+    word.closest('.agb-decoder').querySelectorAll('.decode-word').forEach(w => w.classList.remove('opened'));
+    if (!wasOpen) {
+      target.classList.add('show');
+      word.classList.add('opened');
+    }
+  });
+});
+
+/* ---------- COINS-RECHNER (LIVE-Geschenke) ---------- */
+(function () {
+  const slider = document.getElementById('coins-slider');
+  if (!slider) return;
+  const euro = document.getElementById('coins-euro');
+  const num = document.getElementById('coins-num');
+  const tt = document.getElementById('coins-tt');
+  const creator = document.getElementById('coins-creator');
+  const note = document.getElementById('coins-note');
+
+  function euroFmt(n) { return n.toLocaleString('de-DE', { maximumFractionDigits: 1 }) + ' €'; }
+  function intFmt(n) { return Math.round(n).toLocaleString('de-DE'); }
+
+  function update() {
+    const e = parseInt(slider.value);
+    const coins = e * 80;          // grobe Naeherung: 1 Euro ~ 80 Coins
+    const creatorE = e * 0.5;      // ~50 % kommt beim Creator an
+    const ttE = e - creatorE;      // ~50 % behaelt TikTok
+    euro.textContent = e;
+    num.textContent = '≈ ' + intFmt(coins);
+    tt.textContent = euroFmt(ttE);
+    creator.textContent = euroFmt(creatorE);
+    if (e === 0) {
+      note.innerHTML = 'Zieh den Regler und sieh, wie sich echtes Geld aufteilt. (Vereinfachte Beispielrechnung.)';
+    } else {
+      note.innerHTML = 'Von <strong>' + e + ' €</strong>, die ein Fan ausgibt, behält TikTok rund <strong>die Hälfte</strong>. (Vereinfachte Beispielrechnung.)';
+    }
+  }
+
+  slider.addEventListener('input', update);
+  update();
+})();
+</script>
+</body>
+</html>
