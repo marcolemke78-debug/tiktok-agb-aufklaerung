@@ -291,8 +291,9 @@ h1, h2, h3, h4, h5 { font-family: 'Outfit', sans-serif; }
   line-height: 1.1; margin-bottom: 6px;
 }
 .stat-label { font-size: 1rem; color: var(--text-dim); line-height: 1.45; }
+.stat-card.big-fine { padding: 14px; }
 .stat-card.big-fine .stat-num {
-  font-size: 4rem;
+  font-size: 3rem;
   background: linear-gradient(135deg, #fff, var(--red));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
@@ -509,6 +510,168 @@ h1, h2, h3, h4, h5 { font-family: 'Outfit', sans-serif; }
 .coins-note { margin-top: 14px; font-size: 0.92rem; color: var(--text-dim); line-height: 1.5; text-align: center; }
 .coins-note strong { color: var(--text); }
 
+/* ════════════════════════════════════════════════════
+   ANMELDE-MOCKUP (Handy mit Zustimmungs-Screen)
+   ════════════════════════════════════════════════════ */
+.phone-slide { display: grid; grid-template-columns: 1fr 330px; gap: 48px; align-items: center; }
+.phone-mock {
+  width: 300px; border-radius: 38px; padding: 16px 14px 20px;
+  background: linear-gradient(180deg, #0c1018, #06080d);
+  border: 3px solid rgba(255,255,255,0.14);
+  box-shadow: 0 24px 70px rgba(0,0,0,0.55), 0 0 60px rgba(254,44,85,0.10);
+}
+.phone-notch { width: 92px; height: 14px; background: #1c2230; border-radius: 8px; margin: 0 auto 14px; }
+.phone-app-title {
+  text-align: center; font-family: 'Outfit', sans-serif; font-weight: 800;
+  font-size: 1.15rem; letter-spacing: -0.3px;
+}
+.phone-app-title .tt-cyan { color: var(--cyan); }
+.phone-app-title .tt-red { color: var(--red); }
+.phone-app-sub { text-align: center; font-size: 0.72rem; color: var(--text-dimmer); margin: 4px 0 12px; }
+.phone-terms {
+  height: 190px; overflow-y: scroll; text-align: left;
+  background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px; padding: 10px 12px;
+  font-size: 0.6rem; line-height: 1.55; color: #97a1b1;
+}
+.phone-terms h5 { font-size: 0.63rem; color: #cdd5e0; margin: 8px 0 3px; letter-spacing: 0.3px; }
+.phone-terms h5:first-child { margin-top: 0; }
+.phone-agree-btn {
+  width: 100%; margin-top: 14px; padding: 13px; min-height: 44px;
+  border: none; border-radius: 12px; cursor: pointer;
+  background: linear-gradient(135deg, var(--red), #ff5e7d);
+  color: #fff; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.95rem;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+.phone-agree-btn:hover { transform: scale(1.03); filter: brightness(1.08); }
+.phone-agree-btn:disabled { cursor: default; transform: none; filter: grayscale(0.4) brightness(0.8); }
+.phone-skip { text-align: center; font-size: 0.7rem; color: var(--text-dimmer); margin-top: 10px; }
+.consent-result {
+  display: none; margin-top: 20px; padding: 18px 22px; border-radius: 14px;
+  background: rgba(254,44,85,0.10); border: 1px solid rgba(254,44,85,0.35);
+  font-size: 1.1rem; line-height: 1.6; animation: fade-in 0.4s ease;
+}
+.consent-result .consent-secs { font-family: 'Outfit', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--red); }
+.consent-result strong { color: #ffd0d8; }
+
+/* ════════════════════════════════════════════════════
+   TIPPRHYTHMUS-LIVE-DEMO
+   ════════════════════════════════════════════════════ */
+.typing-demo {
+  margin-top: 16px; padding: 16px 18px; border-radius: 12px;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+  font-style: normal;
+}
+.typing-demo-title {
+  font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.95rem;
+  color: var(--text); margin-bottom: 10px;
+}
+.typing-input {
+  width: 100%; padding: 12px 14px; border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.35);
+  color: #fff; font-size: 1rem; font-family: 'Inter', sans-serif; margin-bottom: 12px;
+}
+.typing-input:focus { outline: none; border-color: var(--red); }
+.typing-bars { display: flex; align-items: flex-end; gap: 3px; height: 64px; }
+.typing-bar {
+  width: 10px; flex-shrink: 0; border-radius: 3px 3px 0 0;
+  background: linear-gradient(180deg, var(--red), rgba(254,44,85,0.35));
+  animation: bar-in 0.2s ease;
+}
+@keyframes bar-in { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+.typing-note { font-size: 0.85rem; color: var(--text-dim); margin-top: 10px; line-height: 1.5; }
+
+/* ════════════════════════════════════════════════════
+   ALGORITHMUS-ENDLOS-SCHLEIFE
+   ════════════════════════════════════════════════════ */
+.algo-grid { display: grid; grid-template-columns: 380px 1fr; gap: 32px; align-items: center; }
+.algo-grid .warn-box, .algo-grid .good-box { padding: 14px 18px; margin-bottom: 10px; }
+.algo-grid .warn-box p, .algo-grid .good-box p, .algo-grid .info-box p { font-size: 0.95rem; }
+.algo-grid .info-box { padding: 12px 16px; margin-top: 0; }
+.algo-loop { position: relative; width: 370px; height: 370px; margin: 0 auto; flex-shrink: 0; }
+.algo-ring {
+  position: absolute; inset: 56px; border-radius: 50%;
+  border: 2.5px dashed rgba(254,44,85,0.55);
+  animation: spin 22s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.algo-node {
+  position: absolute; width: 126px; padding: 8px 7px; z-index: 1;
+  background: rgba(20,12,16,0.92); border: 1px solid rgba(254,44,85,0.4);
+  border-radius: 12px; text-align: center;
+  font-size: 0.74rem; line-height: 1.35; color: var(--text);
+}
+.algo-node .algo-emoji { display: block; font-size: 1.5rem; margin-bottom: 4px; }
+.algo-node.n1 { top: 0; left: 50%; transform: translateX(-50%); }
+.algo-node.n2 { right: 0; top: 50%; transform: translateY(-50%); }
+.algo-node.n3 { bottom: 0; left: 50%; transform: translateX(-50%); }
+.algo-node.n4 { left: 0; top: 50%; transform: translateY(-50%); }
+.algo-center {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  text-align: center; font-family: 'Outfit', sans-serif; font-weight: 800;
+  font-size: 0.85rem; color: var(--red); line-height: 1.3;
+}
+.algo-center .inf { display: block; font-size: 2.4rem; line-height: 1; animation: pulse 2s ease-in-out infinite; }
+
+/* ════════════════════════════════════════════════════
+   DATENREISE (Handy → EU → Welt)
+   ════════════════════════════════════════════════════ */
+.data-route { display: flex; align-items: flex-start; justify-content: center; margin-top: 40px; }
+.route-stop {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  font-size: 0.9rem; color: var(--text-dim); line-height: 1.4; min-width: 130px; text-align: center;
+}
+.route-stop .route-emoji { font-size: 2.4rem; line-height: 1; }
+.route-line {
+  width: 110px; height: 4px; border-radius: 2px; margin-top: 18px;
+  background: repeating-linear-gradient(90deg, rgba(168,85,247,0.7) 0 10px, transparent 10px 20px);
+  background-size: 20px 4px;
+  animation: route-flow 0.8s linear infinite;
+}
+@keyframes route-flow { to { background-position: 20px 0; } }
+
+/* ════════════════════════════════════════════════════
+   STRAFEN-VERGLEICH (530 Mio. greifbar)
+   ════════════════════════════════════════════════════ */
+.fine-compare { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px; }
+.fine-chip {
+  background: var(--bg-card); border: 1px solid rgba(245,184,0,0.25);
+  border-radius: 12px; padding: 10px 12px; text-align: center;
+  font-size: 0.85rem; color: var(--text-dim); line-height: 1.45;
+}
+.fine-chip .fine-emoji { display: block; font-size: 1.3rem; margin-bottom: 4px; }
+.fine-chip strong { color: var(--gold); }
+
+/* ════════════════════════════════════════════════════
+   EINBLEND-ANIMATION + RATE-FEEDBACK
+   ════════════════════════════════════════════════════ */
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.slide.active :is(.fact-card, .quiz-card, .stat-card, .warn-box, .good-box, .info-box, .tips-list li, .compare-table, .fine-chip) {
+  animation: rise-in 0.5s ease backwards;
+}
+.slide.active :is(.fact-card, .quiz-card, .stat-card, .warn-box, .good-box, .info-box, .tips-list li, .fine-chip):nth-child(2) { animation-delay: 0.1s; }
+.slide.active :is(.fact-card, .quiz-card, .stat-card, .warn-box, .good-box, .info-box, .tips-list li, .fine-chip):nth-child(3) { animation-delay: 0.2s; }
+.slide.active :is(.fact-card, .quiz-card, .stat-card, .warn-box, .good-box, .info-box, .tips-list li, .fine-chip):nth-child(4) { animation-delay: 0.3s; }
+.slide.active :is(.fact-card, .quiz-card, .stat-card, .warn-box, .good-box, .info-box, .tips-list li, .fine-chip):nth-child(5) { animation-delay: 0.4s; }
+.slide.active :is(.tips-list li):nth-child(6) { animation-delay: 0.5s; }
+.slide.active :is(.tips-list li):nth-child(7) { animation-delay: 0.6s; }
+#slides-container.overview .slide :is(.fact-card, .quiz-card, .stat-card, .warn-box, .good-box, .info-box, .tips-list li, .compare-table, .fine-chip) { animation: none; }
+
+@keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.14); } 100% { transform: scale(1); } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+.guess-btn.correct { animation: pop 0.4s ease; }
+.guess-btn.wrong { animation: shake 0.4s ease; }
+.guess-result { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; }
+.guess-result.win { color: var(--green); }
+.guess-result.lose { color: var(--red); }
+
+/* COLLECT-GRID (Was TikTok sammelt, 2x2) */
+.collect-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+.collect-grid .fact-card { margin-bottom: 0; }
+
 /* MOBILE */
 @media (max-width: 768px) {
   html { font-size: 16px; }  /* auf Mobile zurueck auf normale Basis, sonst sprengt es das Layout */
@@ -547,14 +710,23 @@ h1, h2, h3, h4, h5 { font-family: 'Outfit', sans-serif; }
   #overview-btn { top: 12px; bottom: auto; left: 14px; width: 30px; height: 30px; font-size: 14px; }
   #slides-container.overview { padding: 20px 12px; gap: 10px; }
   #slides-container.overview .slide { width: calc(50% - 6px); height: 140px; padding: 8px; }
+  .phone-slide { grid-template-columns: 1fr; justify-items: center; gap: 24px; }
+  .phone-mock { width: 270px; }
+  .algo-grid { grid-template-columns: 1fr; gap: 12px; }
+  .algo-loop { transform: scale(0.78); margin: -40px auto; }
+  .data-route { flex-direction: column; gap: 4px; }
+  .route-line { width: 4px; height: 36px; margin-top: 0; background: repeating-linear-gradient(180deg, rgba(168,85,247,0.7) 0 10px, transparent 10px 20px); background-size: 4px 20px; animation-name: route-flow-v; }
+  .fine-compare { grid-template-columns: 1fr; gap: 10px; }
+  .collect-grid { grid-template-columns: 1fr; }
 }
+@keyframes route-flow-v { to { background-position: 0 20px; } }
 </style>
 </head>
 <body>
 
 <div id="progress-bar"></div>
 <div id="nav-dots"></div>
-<div id="slide-counter">1 / 18</div>
+<div id="slide-counter">1 / 19</div>
 <button class="nav-arrow" id="arrow-left" onclick="prevSlide()">&#8592;</button>
 <button class="nav-arrow" id="arrow-right" onclick="nextSlide()">&#8594;</button>
 <button id="overview-btn" onclick="toggleOverview()" title="Übersicht (Esc)">&#9638;</button>
@@ -611,6 +783,51 @@ h1, h2, h3, h4, h5 { font-family: 'Outfit', sans-serif; }
 
     <div class="info-box" style="margin-top:14px; background:rgba(255,255,255,0.03); border-color:rgba(255,255,255,0.12)">
       <p style="color:var(--text-dimmer)">ℹ️ <strong style="color:var(--text-dim)">Hinweis:</strong> Die zitierten Stellen stammen aus den TikTok-Nutzungsbedingungen und der Datenschutzrichtlinie (Stand 2026) und sind für euch sinngemäß ins Deutsche übersetzt.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 2b: ANMELDE-MOCKUP (Live-Experiment) ═══════════ -->
+<div class="slide" data-section="title">
+  <div class="content-wrap phone-slide">
+    <div>
+      <h2 style="font-size:2.2rem">Die schnellste Unterschrift deines Lebens</h2>
+      <p class="lead" style="margin-bottom:18px">
+        So sieht der Moment aus, in dem ein <strong style="color:var(--text)">echter Vertrag</strong> zwischen dir und TikTok entsteht.
+        Probieren wir es aus: Eine:r von euch darf am Board "unterschreiben". Die Uhr läuft ab jetzt&nbsp;…
+      </p>
+      <div class="info-box" style="margin-top:0">
+        <p>👀 <strong>Beobachtungsauftrag für alle:</strong> Wie lange dauert es, bis getippt wird? Und wie viel vom Kleingedruckten wurde vorher gelesen?</p>
+      </div>
+      <div class="consent-result" id="consent-result">
+        ⏱️ Zugestimmt in <span class="consent-secs"><span id="consent-secs">?</span> Sekunden</span>.<br>
+        Die kompletten Bedingungen wirklich zu lesen, würde <strong>weit über eine Stunde</strong> dauern.
+        Genau deshalb lesen wir heute <strong>die wichtigsten Stellen gemeinsam</strong>.
+      </div>
+    </div>
+    <div class="phone-mock">
+      <div class="phone-notch"></div>
+      <div class="phone-app-title">Tik<span class="tt-cyan">T</span><span class="tt-red">o</span>k</div>
+      <div class="phone-app-sub">Bevor du loslegst …</div>
+      <div class="phone-terms">
+        <h5>Nutzungsbedingungen (Auszug, sinngemäß)</h5>
+        <p>Indem du auf die Plattform zugreifst oder sie nutzt, stimmst du diesen Bedingungen zu. Du darfst die Plattform nur nutzen, wenn du 13 Jahre oder älter bist.</p>
+        <h5>1. Deine Inhalte</h5>
+        <p>Du gewährst uns eine nicht-exklusive, gebührenfreie, übertragbare, unterlizenzierbare und weltweite Lizenz, deine Inhalte zu verwenden, zu kopieren, zu bearbeiten und öffentlich zu zeigen.</p>
+        <h5>2. Daten, die wir erheben</h5>
+        <p>Wir erfassen automatisch Informationen wie Gerätemodell, Betriebssystem, Tastenanschlag-Muster oder -Rhythmen, IP-Adresse, Systemsprache und deinen ungefähren Standort.</p>
+        <h5>3. Wie wir Daten nutzen</h5>
+        <p>Wir nutzen die Informationen, um die Plattform zu verbessern – einschließlich unserer Modelle für maschinelles Lernen und Algorithmen.</p>
+        <h5>4. Weitergabe</h5>
+        <p>Bestimmte Unternehmen unserer Unternehmensgruppe außerhalb deines Wohnsitzlandes erhalten Fernzugriff auf diese Informationen. Wir können Informationen mit Behörden teilen, wenn wir dies für erforderlich halten.</p>
+        <h5>5. Virtuelle Artikel</h5>
+        <p>Coins und Geschenke sind virtuelle Artikel ohne Geldwert. Käufe sind von Rückerstattungen ausgeschlossen, soweit gesetzlich zulässig.</p>
+        <h5>6. Speicherung</h5>
+        <p>Wir bewahren Informationen so lange auf, wie es für die Bereitstellung der Dienste notwendig ist – teils auch nach Löschung deines Kontos.</p>
+        <p style="margin-top:8px">… (und noch viele weitere Abschnitte) …</p>
+      </div>
+      <button class="phone-agree-btn" id="agree-btn">Zustimmen und fortfahren</button>
+      <div class="phone-skip">Nicht zustimmen = App nicht nutzen</div>
     </div>
   </div>
 </div>
@@ -782,6 +999,7 @@ h1, h2, h3, h4, h5 { font-family: 'Outfit', sans-serif; }
     <h2>Frage 4: Was sammelt TikTok über dich – ganz automatisch?</h2>
     <p class="lead">Auch ohne dass du etwas postest, sammelt die App im Hintergrund.</p>
 
+    <div class="collect-grid">
     <div class="fact-card">
       <div class="fact-num">1</div>
       <div class="fact-body">
@@ -810,6 +1028,7 @@ h1, h2, h3, h4, h5 { font-family: 'Outfit', sans-serif; }
         <p>Jedes Like, jeder Kommentar – und vor allem: <strong>wie lange du bei jedem Video hängenbleibst</strong>. Genau daraus lernt der Algorithmus.</p>
       </div>
     </div>
+    </div>
 
     <div class="quiz-card" data-guess="buttons" data-correct="wahr" style="margin-top:8px">
       <div class="quiz-q"><span class="quiz-icon">⌨️</span><span>TikTok misst sogar deinen <strong>Tipprhythmus</strong> – also wie du tippst. Wahr oder falsch?</span></div>
@@ -828,6 +1047,12 @@ h1, h2, h3, h4, h5 { font-family: 'Outfit', sans-serif; }
         <strong>Wahr.</strong> Es steht direkt in der Datenschutzrichtlinie:
         <div class="agb-quote">"Diese Informationen umfassen dein Gerätemodell, Betriebssystem, Tastenanschlag-Muster oder -Rhythmen, IP-Adresse, Systemsprache und Geräteeinstellungen."</div>
         <span class="punchline">😳 Dein Tipprhythmus ist fast wie ein Fingerabdruck – man könnte dich daran wiedererkennen, selbst wenn du nicht eingeloggt bist.</span>
+        <div class="typing-demo">
+          <div class="typing-demo-title">⌨️ Probier's live: Tipp einen Satz – dein Rhythmus wird sichtbar</div>
+          <input type="text" class="typing-input" id="typing-input" placeholder="Tipp hier irgendeinen Satz …" autocomplete="off">
+          <div class="typing-bars" id="typing-bars"></div>
+          <div class="typing-note">Jeder Balken = die Pause zwischen zwei Tastendrücken. Lass zwei Personen denselben Satz tippen: Das Muster sieht jedes Mal anders aus – genau das speichert TikTok.</div>
+        </div>
       </div>
     </div>
   </div>
@@ -837,24 +1062,30 @@ h1, h2, h3, h4, h5 { font-family: 'Outfit', sans-serif; }
 <div class="slide theme-algo" data-section="algo">
   <div class="content-wrap">
     <h2>Frage 5: Warum kannst du nicht aufhören zu scrollen?</h2>
-    <p class="lead">Der "Für dich"-Feed ist das Herzstück von TikTok – und kein Zufall.</p>
+    <p class="lead">Der "Für dich"-Feed ist kein Zufall. TikTok schreibt selbst: <em>"Wir zeigen dir Videos, von denen wir glauben, dass sie dich interessieren."</em></p>
 
-    <div class="info-box" style="margin-top:0">
-      <p>📜 <strong>Was TikTok dazu sagt:</strong> "Wir personalisieren bestimmte Funktionen und Inhalte, zum Beispiel deinen <em>"Für dich"-Feed</em>, der dir Videos zeigt, von denen wir glauben, dass sie dich interessieren."</p>
-    </div>
-
-    <div class="warn-box">
-      <h4>🔁 Wie das funktioniert</h4>
-      <p>Aus jeder Sekunde, die du bei einem Video bleibst, lernt der Algorithmus dazu. Der Feed <strong>hört nie auf</strong> – es gibt kein Ende, keine "letzte Seite". Genau das ist <strong>so gebaut</strong>, dass du möglichst lange dranbleibst. Das ist gut fürs Unternehmen (mehr Werbung), aber nicht unbedingt gut für dich.</p>
-    </div>
-
-    <div class="good-box">
-      <h4>✅ Dein Recht in der EU</h4>
-      <p>Wegen eines EU-Gesetzes (dem <strong>Digital Services Act</strong>) musst du in Europa den personalisierten Feed <strong>abschalten</strong> können. Dann bekommst du Videos, die <em>nicht</em> auf dein Verhalten zugeschnitten sind – ein guter Weg, um die "Sucht-Schleife" zu durchbrechen.</p>
-    </div>
-
-    <div class="info-box">
-      <p>💡 <strong>Tipp:</strong> Stell dir beim Scrollen einmal die Frage: <em>"Will ich das gerade – oder will der Algorithmus, dass ich weitermache?"</em></p>
+    <div class="algo-grid">
+      <div class="algo-loop">
+        <div class="algo-ring"></div>
+        <div class="algo-node n1"><span class="algo-emoji">👀</span>Du bleibst bei einem Video 3 Sek. länger</div>
+        <div class="algo-node n2"><span class="algo-emoji">📊</span>TikTok misst jede Sekunde mit</div>
+        <div class="algo-node n3"><span class="algo-emoji">🧠</span>Der Algorithmus lernt, was dich fesselt</div>
+        <div class="algo-node n4"><span class="algo-emoji">🎬</span>Dein Feed zeigt mehr davon</div>
+        <div class="algo-center"><span class="inf">∞</span>kein Ende,<br>keine letzte Seite</div>
+      </div>
+      <div>
+        <div class="warn-box">
+          <h4>🔁 Eine Schleife ohne Ausgang</h4>
+          <p>Der Feed ist <strong>absichtlich so gebaut</strong>, dass du möglichst lange dranbleibst – je länger du scrollst, desto mehr Werbung sieht TikTok dich an. Gut fürs Unternehmen, nicht unbedingt gut für dich.</p>
+        </div>
+        <div class="good-box">
+          <h4>✅ Dein Recht in der EU</h4>
+          <p>Dank des <strong>Digital Services Act</strong> kannst du den personalisierten Feed in Europa <strong>abschalten</strong> – das durchbricht die Schleife.</p>
+        </div>
+        <div class="info-box">
+          <p>💡 <strong>Selbst-Check beim Scrollen:</strong> <em>"Will ich das gerade – oder will der Algorithmus, dass ich weitermache?"</em></p>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -868,6 +1099,13 @@ h1, h2, h3, h4, h5 { font-family: 'Outfit', sans-serif; }
     <blockquote class="section-quote">
       "Deine Daten bleiben nicht einfach auf deinem Handy. Die Frage ist: Wer kann sie sehen – und in welchem Land liegen sie eigentlich?"
     </blockquote>
+    <div class="data-route">
+      <div class="route-stop"><span class="route-emoji">📱</span>Dein Handy<br>(Deutschland)</div>
+      <div class="route-line"></div>
+      <div class="route-stop"><span class="route-emoji">🇮🇪</span>TikTok Irland<br>(EU-Zentrale)</div>
+      <div class="route-line"></div>
+      <div class="route-stop"><span class="route-emoji">🌏</span>Konzern weltweit<br>(u. a. China)</div>
+    </div>
   </div>
 </div>
 
@@ -919,12 +1157,17 @@ h1, h2, h3, h4, h5 { font-family: 'Outfit', sans-serif; }
 
     <div class="warn-box" style="margin-top:16px">
       <h4>🇨🇳 Worum ging es?</h4>
-      <p>Daten von europäischen TikTok-Nutzern konnten <strong>aus China abgerufen</strong> werden. TikTok konnte nicht garantieren, dass diese Daten dort genauso geschützt sind wie in der EU. Das verstößt gegen die <strong>DSGVO</strong>.</p>
-      <p style="margin-top:10px">Besonders heikel: Im Februar 2025 musste TikTok zugeben, dass europäische Nutzerdaten sogar <strong>auf Servern in China gespeichert</strong> waren – obwohl die Firma vorher das Gegenteil behauptet hatte.</p>
+      <p>Daten von europäischen Nutzern konnten <strong>aus China abgerufen</strong> werden – ohne Garantie, dass sie dort so geschützt sind wie in der EU (Verstoß gegen die <strong>DSGVO</strong>). Im Februar 2025 musste TikTok sogar zugeben, dass europäische Daten <strong>auf Servern in China gespeichert</strong> waren – obwohl die Firma vorher das Gegenteil behauptet hatte.</p>
+    </div>
+
+    <div class="fine-compare">
+      <div class="fine-chip"><span class="fine-emoji">📱</span>≈ <strong>558.000 iPhones</strong><br>(à 950 €)</div>
+      <div class="fine-chip"><span class="fine-emoji">💶</span>Bei 30 € Taschengeld im Monat:<br><strong>≈ 1,5 Millionen Jahre</strong> sparen</div>
+      <div class="fine-chip"><span class="fine-emoji">🏟️</span>Mehr, als ein ganzes<br><strong>Bundesliga-Stadion</strong> kostet</div>
     </div>
 
     <div class="info-box">
-      <p>💡 <strong>Was heißt das für dich?</strong> "Meine Daten bleiben schon in Europa" stimmt nicht automatisch. Wo deine Daten landen und wer sie sehen kann, entscheidest nicht du – sondern die AGB, denen du zugestimmt hast.</p>
+      <p>💡 <strong>Was heißt das für dich?</strong> Wo deine Daten landen, entscheidest nicht du – sondern die AGB, denen du zugestimmt hast.</p>
     </div>
   </div>
 </div>
@@ -1110,6 +1353,7 @@ h1, h2, h3, h4, h5 { font-family: 'Outfit', sans-serif; }
 <script>
 let currentSlide = 0;
 let isOverview = false;
+let consentStart = null;   // Stoppuhr fuer das Anmelde-Mockup
 const slides = document.querySelectorAll('.slide');
 const totalSlides = slides.length;
 const navDots = document.getElementById('nav-dots');
@@ -1135,6 +1379,8 @@ slides.forEach((slide, idx) => {
 });
 
 function updateUI() {
+  // Zustimmungs-Stoppuhr starten, sobald die Mockup-Folie sichtbar wird
+  if (consentStart === null && slides[currentSlide].querySelector('#agree-btn')) consentStart = performance.now();
   document.getElementById('progress-bar').style.width = ((currentSlide) / (totalSlides - 1)) * 100 + '%';
   document.getElementById('slide-counter').textContent = `${currentSlide + 1} / ${totalSlides}`;
   document.querySelectorAll('.nav-dot').forEach(dot => {
@@ -1199,6 +1445,8 @@ function toggleOverview() {
 }
 
 document.addEventListener('keydown', (e) => {
+  // In Eingabefeldern (z. B. Tipprhythmus-Demo) nicht blättern
+  if (e.target.closest && e.target.closest('input, textarea')) return;
   if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); nextSlide(); }
   if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); prevSlide(); }
   if (e.key === 'Escape') { e.preventDefault(); toggleOverview(); }
@@ -1220,6 +1468,10 @@ document.addEventListener('touchend', (e) => {
 });
 
 updateUI();
+
+// Direktsprung per URL-Hash, z. B. index.html#9 -> Folie 9
+const hashNr = parseInt(location.hash.slice(1));
+if (!isNaN(hashNr)) goToSlide(hashNr - 1);
 
 /* ════════════════════════════════════════════════════
    INTERAKTIVE KOMPONENTEN
@@ -1256,6 +1508,7 @@ document.querySelectorAll('.quiz-card').forEach(card => {
       e.stopPropagation();
       if (yourTip) yourTip.textContent = slider.value;
       slider.disabled = true;
+      showGuessResult(card, Math.abs(parseInt(slider.value) - parseInt(correct)) === 0);
       card.classList.add('guessed');
       card.classList.add('open');
     });
@@ -1274,12 +1527,59 @@ document.querySelectorAll('.quiz-card').forEach(card => {
           else if (b === btn && val !== correct) b.classList.add('wrong');
         });
         if (val === correct) btn.classList.add('selected');
+        showGuessResult(card, val === correct);
         card.classList.add('guessed');
         card.classList.add('open');
       });
     });
   }
 });
+
+/* ---------- RATE-FEEDBACK (🎉 / 😬 vor der Aufloesung) ---------- */
+function showGuessResult(card, isCorrect) {
+  const fb = card.querySelector('.guess-feedback');
+  if (!fb || fb.querySelector('.guess-result')) return;
+  const tag = document.createElement('div');
+  tag.className = 'guess-result ' + (isCorrect ? 'win' : 'lose');
+  tag.textContent = isCorrect ? '🎉 Richtig gelegen!' : '😬 Knapp daneben!';
+  fb.prepend(tag);
+}
+
+/* ---------- ANMELDE-MOCKUP: Zustimmungs-Stoppuhr ---------- */
+(function () {
+  const btn = document.getElementById('agree-btn');
+  if (!btn) return;
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    const secs = consentStart !== null ? Math.max(1, Math.round((performance.now() - consentStart) / 1000)) : null;
+    document.getElementById('consent-secs').textContent = secs !== null ? secs : '?';
+    document.getElementById('consent-result').style.display = 'block';
+    btn.textContent = '✓ Zugestimmt';
+    btn.disabled = true;
+  });
+})();
+
+/* ---------- TIPPRHYTHMUS-LIVE-DEMO ---------- */
+(function () {
+  const input = document.getElementById('typing-input');
+  if (!input) return;
+  const bars = document.getElementById('typing-bars');
+  let last = null;
+  input.addEventListener('click', e => e.stopPropagation());
+  input.addEventListener('keydown', e => {
+    e.stopPropagation();
+    const now = performance.now();
+    if (last !== null) {
+      const delta = Math.min(now - last, 600);   // Pausen ueber 600 ms kappen
+      const bar = document.createElement('div');
+      bar.className = 'typing-bar';
+      bar.style.height = Math.max(8, Math.round(delta / 600 * 64)) + 'px';
+      bars.appendChild(bar);
+      while (bars.children.length > 28) bars.removeChild(bars.firstChild);
+    }
+    last = now;
+  });
+})();
 
 /* ---------- AGB-WORT-DECODER ---------- */
 document.querySelectorAll('.decode-word').forEach(word => {
